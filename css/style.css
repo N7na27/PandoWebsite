@@ -182,9 +182,9 @@ p { font-weight: 400; }
 /* Soft blurred color blobs, matching the Figma footer */
 .footer-glow { position: absolute; inset: 0; z-index: -1; pointer-events: none; }
 .footer-glow span { position: absolute; border-radius: 50%; }
-.footer-glow .g1 { left: -512px; bottom: -1192px; width: 1638px; height: 1638px; background: rgba(186, 225, 226, 0.75); filter: blur(200px); }
-.footer-glow .g2 { left: -471px; bottom: -1170px; width: 1468px; height: 1468px; background: #d55d36; filter: blur(150px); }
-.footer-glow .g3 { left: -534px; bottom: -1217px; width: 1423px; height: 1423px; background: #e7ab03; filter: blur(120px); }
+.footer-glow .g1 { left: -507px; bottom: -1231px; width: 1638px; height: 1638px; background: rgba(186, 225, 226, 0.75); filter: blur(200px); }
+.footer-glow .g2 { left: -494px; bottom: -1205px; width: 1468px; height: 1468px; background: #d55d36; filter: blur(150px); }
+.footer-glow .g3 { left: -557px; bottom: -1252px; width: 1423px; height: 1423px; background: #e7ab03; filter: blur(120px); }
 
 .footer-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 56px; }
 .footer-brand {
