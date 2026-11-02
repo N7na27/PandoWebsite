@@ -2,7 +2,7 @@
    Two themes: "cold" (Website Ver2) and "warm" (Website Ver1, cream).
    The theme is set on <html data-theme="..."> and saved in localStorage. */
 
-:root { --pad: 120px; }
+:root { --pad: 120px; --ease-soft: cubic-bezier(0.22, 1, 0.36, 1); }
 
 :root,
 :root[data-theme="cold"] {
@@ -377,9 +377,17 @@ p { font-weight: 400; }
 
 .team { text-align: center; padding: 172px var(--pad) 160px; background: var(--light); }
 .team h2 { font-size: 64px; margin-top: 140px; }
-.team-grid { display: flex; justify-content: center; flex-wrap: wrap; gap: 24px; margin-top: 82px; text-align: left; }
-.member { width: 300px; background: var(--dark); color: var(--on-dark); border-radius: 8px; overflow: hidden; }
-.member img { width: 300px; height: 300px; object-fit: cover; }
+.team-grid { display: flex; justify-content: center; gap: 24px; margin-top: 82px; text-align: left; }
+/* Four cards always share one row on desktop; they shrink a little on narrower laptops */
+.member { position: relative; flex: 0 1 300px; min-width: 0; background: var(--dark); color: var(--on-dark); border-radius: 8px; overflow: hidden; }
+.member .photo { display: block; overflow: hidden; }
+.member .photo img { display: block; width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; transition: transform 700ms var(--ease-soft); }
+/* Hover (Figma "Team Member / Hover"): gold outline, soft shadow, slight lift */
+.member::after { content: ""; position: absolute; inset: 0; border-radius: inherit; box-shadow: inset 0 0 0 2px rgba(231, 171, 3, 0.7); opacity: 0; transition: opacity 450ms var(--ease-soft); pointer-events: none; }
+.member.reveal { transition: opacity 600ms ease-out, transform 600ms ease-out, translate 450ms var(--ease-soft), box-shadow 450ms var(--ease-soft); }
+.member:hover, .member:focus-within { translate: 0 -6px; box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18); }
+.member:hover::after, .member:focus-within::after { opacity: 1; }
+.member:hover .photo img, .member:focus-within .photo img { transform: scale(1.03); }
 .member-info { padding: 20px 24px; display: flex; flex-direction: column; gap: 14px; }
 .member-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
 .member h3 { font-size: 28px; letter-spacing: -0.28px; line-height: 1.15; }
@@ -391,13 +399,20 @@ p { font-weight: 400; }
 .news-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 620px)); gap: 56px 32px; justify-content: center; margin-top: 72px; }
 .news-head { max-width: 1272px; margin: 0 auto; }
 .card {
-  background: var(--light); border-radius: 12px; padding: 16px;
+  position: relative; isolation: isolate; background: none; border-radius: 12px; padding: 16px;
   display: flex; flex-direction: column; gap: 16px; text-align: left; width: 100%;
-  box-shadow: 0 0 0 1px rgba(46, 49, 53, 0.08);
-  transition: box-shadow 200ms ease-out, transform 200ms ease-out;
 }
-.card:hover { box-shadow: 0 0 0 1px rgba(46, 49, 53, 0.12), 0 16px 40px rgba(0, 0, 0, 0.08); transform: translateY(-2px); }
-.card img { width: 100%; height: 320px; object-fit: cover; border-radius: 5px; }
+/* The white panel sits behind the content. On hover it grows 8px on every side and lifts with a shadow, like the Figma hover variant, while the content stays still */
+.card::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; border-radius: 12px; background: #fff;
+  box-shadow: 0 16px 40px rgba(46, 49, 53, 0);
+  transition: inset 450ms var(--ease-soft), box-shadow 450ms var(--ease-soft);
+}
+.card:hover::before, .card:focus-visible::before { inset: -8px; box-shadow: 0 16px 40px rgba(46, 49, 53, 0.14); }
+.card .img-wrap { display: block; overflow: hidden; border-radius: 5px; }
+.card .img-wrap img { transition: transform 700ms var(--ease-soft); }
+.card:hover .img-wrap img, .card:focus-visible .img-wrap img { transform: scale(1.03); }
+.card .img-wrap img { display: block; width: 100%; height: 320px; object-fit: cover; border-radius: 5px; }
 .card-text { padding: 4px 4px 0; display: flex; flex-direction: column; gap: 10px; }
 .cat { font-size: 14px; font-weight: 500; color: var(--gold); }
 .card h3 { font-size: 24px; line-height: 1.25; }
@@ -601,6 +616,8 @@ input::placeholder, textarea::placeholder { color: rgba(46, 49, 53, 0.4); }
   .overview { flex-direction: column; gap: 32px; }
   .overview h2 { width: auto; }
   .news-grid { grid-template-columns: minmax(0, 620px); }
+  .team-grid { flex-wrap: wrap; }
+  .member { flex-basis: calc(50% - 12px); max-width: 300px; }
   .trust { flex-direction: column; align-items: flex-start; gap: 12px; height: auto; top: auto; bottom: 28px; }
   .trust p { width: auto; }
   .marquee { width: 100%; max-width: none; margin: 0; }
@@ -665,7 +682,8 @@ input::placeholder, textarea::placeholder { color: rgba(46, 49, 53, 0.4); }
   .team, .news { padding: 130px var(--pad) 96px; }
   .team h2 { margin-top: 96px; font-size: 40px; }
   .team-grid { margin-top: 48px; }
-  .card img { height: 220px; }
+  .member { flex-basis: 100%; max-width: 340px; }
+  .card .img-wrap img { height: 220px; }
   .about-hero { height: 100svh; min-height: 560px; }
   .about-hero h1 { font-size: 40px; }
   .story { padding: 96px var(--pad); gap: 48px; }

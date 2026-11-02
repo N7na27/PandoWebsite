@@ -336,7 +336,7 @@ def member(m, img):
     name, role, edu, li = m
     link = social("team-linkedin", f"{name} on LinkedIn", li) if li else ""
     return f"""<article class="member reveal">
-      <img src="assets/img/{img}" alt="{name}" width="300" height="300" loading="lazy">
+      <span class="photo"><img src="assets/img/{img}" alt="{name}" width="300" height="300" loading="lazy"></span>
       <div class="member-info">
         <div class="member-head"><div><h3>{name}</h3><p class="role">{role}</p></div>{link}</div>
         <hr>
@@ -374,7 +374,7 @@ cards = []
 modals = []
 for i, (cat, title, date, text) in enumerate(STORIES, 1):
     cards.append(f"""<button class="card reveal" data-modal="story-{i}" aria-haspopup="dialog">
-      <img src="assets/img/news-{i}.jpg" alt="" loading="lazy">
+      <span class="img-wrap"><img src="assets/img/news-{i}.jpg" alt="" loading="lazy"></span>
       <div class="card-text">
         <span class="cat">{cat}</span>
         <h3>{title}</h3>
