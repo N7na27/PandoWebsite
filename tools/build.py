@@ -30,9 +30,9 @@ def social(name, label, href):
     return f'<a class="social" href="{href}" aria-label="{label}"{ext}>{s}</a>'
 
 
-# Social links for the company (fill in the real URLs when known)
-COMPANY_LINKEDIN = "#"
-COMPANY_YOUTUBE = "#"
+# Social links for the company
+COMPANY_LINKEDIN = "https://www.linkedin.com/company/pandosurgical/posts/?feedView=all"
+COMPANY_YOUTUBE = "https://www.youtube.com/@pandosurgical"
 
 
 def nav(page):
