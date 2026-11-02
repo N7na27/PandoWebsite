@@ -214,24 +214,26 @@ p { font-weight: 400; }
 .on-dark { background: var(--dark); color: var(--on-dark); }
 
 /* ---------- Landing ---------- */
+/* The hero always fits one screen: everything is anchored to the bottom,
+   so the headline, button and logo bar stay visible on short laptop screens. */
 .hero {
-  position: relative; height: 1082px; min-height: 100vh;
+  position: relative; height: 100vh; height: 100svh; min-height: 600px; max-height: 1082px;
   background: var(--dark) url("../assets/img/hero-bg.jpg") center top / cover no-repeat;
   color: var(--on-dark); overflow: hidden;
 }
 .hero-fade { position: absolute; left: 0; right: 0; bottom: 0; height: 440px; background: var(--hero-fade); }
 .hero-content {
-  position: absolute; left: var(--pad); top: 459px;
+  position: absolute; left: var(--pad); bottom: 200px;
   display: flex; flex-direction: column; gap: 28px; align-items: flex-start;
 }
-.hero h1 { font-size: 75px; line-height: 95px; font-weight: 500; }
-.rolling { display: block; height: 109px; overflow: hidden; position: relative; }
+.hero h1 { font-size: 75px; line-height: 79px; font-weight: 500; }
+.rolling { display: block; height: 92px; overflow: hidden; position: relative; }
 .rolling-track { display: block; transition: transform 600ms cubic-bezier(.65, 0, .35, 1); }
-.rolling-track span { display: block; height: 109px; line-height: 118px; color: var(--on-dark); }
+.rolling-track span { display: block; height: 92px; line-height: 79px; color: var(--on-dark); }
 .hero-sub { font-size: 26px; line-height: 1.35; opacity: 0.9; max-width: 539px; }
 .hero .btn { height: auto; padding: 14px 28px; }
 .trust {
-  position: absolute; left: var(--pad); right: var(--pad); top: 951px; height: 72px;
+  position: absolute; left: var(--pad); right: var(--pad); bottom: 48px; height: 72px;
   display: flex; align-items: center; gap: 72px;
 }
 .trust p { font-size: 16px; font-weight: 500; opacity: 0.8; width: 222px; flex: none; line-height: 1.4; }
@@ -566,8 +568,9 @@ input::placeholder, textarea::placeholder { color: rgba(46, 49, 53, 0.4); }
   .nav-links { gap: 24px; }
   .nav-right { gap: 16px; }
   .nav-util { gap: 20px; }
-  .hero h1 { font-size: 60px; line-height: 76px; }
-  .rolling, .rolling-track span { height: 88px; line-height: 96px; }
+  .hero h1 { font-size: 60px; line-height: 64px; }
+  .rolling, .rolling-track span { height: 74px; line-height: 64px; }
+  .hero-content { bottom: 220px; }
   .why, .product, .grove, .story, .investors, .ent { flex-direction: column; align-items: flex-start; }
   .grove .placeholder, .product .placeholder { width: 100%; max-width: 640px; height: 420px; }
   .ent img { width: 100%; max-width: 560px; }
@@ -609,10 +612,10 @@ input::placeholder, textarea::placeholder { color: rgba(46, 49, 53, 0.4); }
   .nav.menu-open .mobile-extra { display: flex; }
   .mobile-extra .row { display: flex; gap: 24px; align-items: center; }
 
-  .hero { height: 100svh; min-height: 720px; }
+  .hero { min-height: 640px; max-height: none; }
   .hero-content { top: auto; bottom: 200px; right: var(--pad); }
-  .hero h1 { font-size: 42px; line-height: 52px; }
-  .rolling, .rolling-track span { height: 60px; line-height: 64px; }
+  .hero h1 { font-size: 42px; line-height: 46px; }
+  .rolling, .rolling-track span { height: 54px; line-height: 46px; }
   .hero-sub { font-size: 20px; }
   .trust { bottom: 32px; }
   .marquee::before, .marquee::after { width: 60px; }
@@ -670,6 +673,20 @@ input::placeholder, textarea::placeholder { color: rgba(46, 49, 53, 0.4); }
   .footer-col { width: 140px; }
   .footer-bottom { flex-direction: column-reverse; align-items: flex-start; }
   .footer-legal { gap: 20px; }
+}
+
+/* Short laptop screens: shrink the hero a little so it still fits */
+@media (min-width: 901px) and (max-height: 820px) {
+  .hero h1 { font-size: 64px; line-height: 68px; }
+  .rolling, .rolling-track span { height: 80px; line-height: 68px; }
+  .hero-sub { font-size: 22px; }
+  .hero-content { gap: 22px; bottom: 156px; }
+  .trust { bottom: 28px; }
+}
+@media (min-width: 901px) and (max-height: 680px) {
+  .hero h1 { font-size: 52px; line-height: 56px; }
+  .rolling, .rolling-track span { height: 66px; line-height: 56px; }
+  .hero-sub { font-size: 20px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
