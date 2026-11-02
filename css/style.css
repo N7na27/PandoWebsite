@@ -452,7 +452,8 @@ p { font-weight: 400; }
 .story-body { padding: 36px 48px 44px; display: flex; flex-direction: column; gap: 14px; }
 .story-body .cat { font-size: 15px; }
 .story-body h2 { font-size: 36px; line-height: 1.18; }
-.story-body time { font-size: 15px; color: rgba(46, 49, 53, 0.5); }
+.story-author { gap: 14px; padding: 4px 0 8px; }
+.story-author time { font-size: 15px; color: rgba(46, 49, 53, 0.55); }
 .story-body p.body { font-size: 18px; line-height: 1.65; color: rgba(46, 49, 53, 0.8); }
 
 .login-card { max-width: 560px; box-shadow: 0 24px 30px rgba(0, 0, 0, 0.25); }

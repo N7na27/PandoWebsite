@@ -390,7 +390,7 @@ for i, (cat, title, date, text) in enumerate(STORIES, 1):
     <div class="story-body">
       <span class="cat">{cat}</span>
       <h2 id="story-{i}-title">{title}</h2>
-      <time>{date}</time>
+      <span class="author story-author">{AVATAR}<span><b>Pando Surgical Team</b><time>{date}</time></span></span>
       <p class="body">{text}</p>
     </div>
   </article>
