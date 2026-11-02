@@ -83,13 +83,10 @@ def nav(page):
 
 
 FOOTER = f"""<footer class="footer">
+  <div class="footer-glow" aria-hidden="true"><span class="g1"></span><span class="g2"></span><span class="g3"></span></div>
   <div class="footer-top">
     <div class="footer-brand">
       <p>Making surgical tools equitable, efficient, and ergonomic.</p>
-      <div class="socials">
-        {social("linkedin", "Pando Surgical on LinkedIn", COMPANY_LINKEDIN)}
-        {social("youtube", "Pando Surgical on YouTube", COMPANY_YOUTUBE)}
-      </div>
     </div>
     <div class="footer-cols">
       <div class="footer-col">
@@ -105,15 +102,23 @@ FOOTER = f"""<footer class="footer">
         <ul><li><a href="investors.html">Investors</a></li><li><a href="contact.html">Contact Us</a></li></ul>
       </div>
     </div>
-    <a href="index.html" class="footer-mark" aria-label="Pando Surgical home">{svg("footer-mark")}</a>
   </div>
   <div class="footer-bottom">
-    <small>© 2026 Pando Surgical, Inc. All rights reserved.</small>
-    <nav class="footer-legal" aria-label="Legal">
-      <a href="privacy.html">Privacy Notice</a>
-      <a href="terms.html">Terms of Use</a>
-      <a href="accessibility.html">Accessibility Statement</a>
-    </nav>
+    <div class="footer-left">
+      <a href="index.html" class="footer-wordmark" aria-label="Pando Surgical home">{svg("pando-wordmark").replace('fill="#FFFCF2"', 'fill="currentColor"')}</a>
+      <div class="socials">
+        {social("linkedin", "Pando Surgical on LinkedIn", COMPANY_LINKEDIN)}
+        {social("youtube", "Pando Surgical on YouTube", COMPANY_YOUTUBE)}
+      </div>
+    </div>
+    <div class="footer-right">
+      <nav class="footer-legal" aria-label="Legal">
+        <a href="privacy.html">Privacy Notice</a>
+        <a href="terms.html">Terms of Use</a>
+        <a href="accessibility.html">Accessibility Statement</a>
+      </nav>
+      <small>© 2026 Pando Surgical, Inc. All rights reserved.</small>
+    </div>
   </div>
 </footer>"""
 
