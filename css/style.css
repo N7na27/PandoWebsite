@@ -383,13 +383,12 @@ p { font-weight: 400; }
 /* Four cards always share one row on desktop; they shrink a little on narrower laptops */
 .member { position: relative; flex: 0 1 300px; min-width: 0; background: var(--dark); color: var(--on-dark); border-radius: 8px; overflow: hidden; }
 .member .photo { display: block; overflow: hidden; }
-.member .photo img { display: block; width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; transition: transform 700ms var(--ease-soft); }
-/* Hover (Figma "Team Member / Hover"): gold outline, soft shadow, slight lift */
-.member::after { content: ""; position: absolute; inset: 0; border-radius: inherit; box-shadow: inset 0 0 0 2px rgba(231, 171, 3, 0.7); opacity: 0; transition: opacity 450ms var(--ease-soft); pointer-events: none; }
-.member.reveal { transition: opacity 600ms ease-out, transform 600ms ease-out, translate 450ms var(--ease-soft), box-shadow 450ms var(--ease-soft); }
-.member:hover, .member:focus-within { translate: 0 -6px; box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18); }
+.member .photo img { display: block; width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; }
+/* Hover (Figma "Team Member / Hover"): 1px gold border and a soft shadow fade in. The card stays in place */
+.member::after { content: ""; position: absolute; inset: 0; border-radius: inherit; box-shadow: inset 0 0 0 1px rgba(231, 171, 3, 0.7); opacity: 0; transition: opacity 400ms var(--ease-soft); pointer-events: none; }
+.member.reveal { transition: opacity 600ms ease-out, transform 600ms ease-out, box-shadow 400ms var(--ease-soft); }
+.member:hover, .member:focus-within { box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18); }
 .member:hover::after, .member:focus-within::after { opacity: 1; }
-.member:hover .photo img, .member:focus-within .photo img { transform: scale(1.03); }
 .member-info { padding: 20px 24px; display: flex; flex-direction: column; gap: 14px; }
 .member-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
 .member h3 { font-size: 28px; letter-spacing: -0.28px; line-height: 1.15; }
@@ -412,8 +411,6 @@ p { font-weight: 400; }
 }
 .card:hover::before, .card:focus-visible::before { inset: -8px; box-shadow: 0 16px 40px rgba(46, 49, 53, 0.14); }
 .card .img-wrap { display: block; overflow: hidden; border-radius: 5px; }
-.card .img-wrap img { transition: transform 700ms var(--ease-soft); }
-.card:hover .img-wrap img, .card:focus-visible .img-wrap img { transform: scale(1.03); }
 .card .img-wrap img { display: block; width: 100%; height: 320px; object-fit: cover; border-radius: 5px; }
 .card-text { padding: 4px 4px 0; display: flex; flex-direction: column; gap: 10px; }
 .cat { font-size: 14px; font-weight: 500; color: var(--gold); }
