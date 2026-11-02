@@ -177,14 +177,14 @@ p { font-weight: 400; }
 .footer {
   position: relative; overflow: hidden; isolation: isolate;
   background: var(--dark); color: var(--on-dark);
-  padding: 201px var(--pad) 82px;
+  padding: 129px var(--pad) 84px;
 }
 /* Soft blurred color blobs, matching the Figma footer */
 .footer-glow { position: absolute; inset: 0; z-index: -1; pointer-events: none; }
 .footer-glow span { position: absolute; border-radius: 50%; }
-.footer-glow .g1 { left: -507px; bottom: -1229px; width: 1638px; height: 1638px; background: rgba(186, 225, 226, 0.75); filter: blur(100px); }
-.footer-glow .g2 { left: -494px; bottom: -1203px; width: 1468px; height: 1468px; background: #d55d36; filter: blur(75px); }
-.footer-glow .g3 { left: -557px; bottom: -1250px; width: 1423px; height: 1423px; background: #e7ab03; filter: blur(60px); }
+.footer-glow .g1 { left: -507px; bottom: -1227px; width: 1638px; height: 1638px; background: rgba(186, 225, 226, 0.75); filter: blur(100px); }
+.footer-glow .g2 { left: -494px; bottom: -1201px; width: 1468px; height: 1468px; background: #d55d36; filter: blur(75px); }
+.footer-glow .g3 { left: -557px; bottom: -1248px; width: 1423px; height: 1423px; background: #e7ab03; filter: blur(60px); }
 
 .footer-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 56px; }
 .footer-brand {
