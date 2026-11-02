@@ -387,7 +387,7 @@ p { font-weight: 400; }
 /* Hover (Figma Ver2 "Team Member / Hover"): a soft shadow fades in. No border, no lift, no photo zoom */
 .member.reveal { transition: opacity 600ms ease-out, transform 600ms ease-out, box-shadow 400ms var(--ease-soft); }
 /* Mouse hover, or keyboard focus on the LinkedIn link. A mouse click on the link does not leave the shadow on */
-.member:hover, .member:has(:focus-visible) { box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18); }
+.member:hover, .member:has(:focus-visible) { box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12), 0 18px 40px rgba(0, 0, 0, 0.3); }
 .member-info { padding: 20px 24px; display: flex; flex-direction: column; gap: 14px; }
 .member-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
 .member h3 { font-size: 28px; letter-spacing: -0.28px; line-height: 1.15; }
