@@ -363,7 +363,7 @@ FOUNDERS = [
     ("Aiden Pan", "CEO & Co-Founder", "USC Biomedical Engineering", "https://www.linkedin.com/in/aidenpan/"),
     ("Toshi Nagai", "Co-Founder", "USC Biomedical Engineering and Mechanical Engineering", "https://www.linkedin.com/in/toshio-nagai2029/"),
     ("Derek Hua", "Co-Founder and Head of Clinical Development", "USC Biomedical Engineering and Pre-Medicine", "https://www.linkedin.com/in/derekhuausc/"),
-    ("Sean Lee", "Manager of Strategic Partners", "Cornell University Biomedical Engineering", "https://www.linkedin.com/in/sean-long-siang-lee-9bbab8373/"),
+    ("Sean Lee", "Manager of Strategic Partners", "Cornell University Biomedical Engineering", "https://www.linkedin.com/in/sean-lee-9bbab8373/"),
 ]
 ADVISORS = [
     ("Noah Pearson", "Advisor", "PhD Mechanical Engineering", "https://www.linkedin.com/in/noah-r-pearson/"),
