@@ -275,7 +275,6 @@ page("index.html", "Home", "Pando Surgical makes ergonomic surgical tools that a
 <section class="product">
   <div class="reveal">
     <h2>Built for surgical needs.<br>Introducing LapRotator</h2>
-    <p class="lede">Our first ergonomic tool for laparoscopic surgery.</p>
     {btn("Learn more about LapRotator", "laprotator.html", "dark")}
     <div class="proof">
       <div class="proof-item"><img src="assets/icons/icon-people.svg" alt=""><span>Requested by<br>surgeons</span></div>
@@ -357,7 +356,6 @@ page("ent.html", "ENT Product", "Pando Surgical is developing a new ergonomic so
 <section class="ent">
   <div class="ent-text reveal">
     <h1>Ergonomic ENT Product</h1>
-    <p class="eyebrow">In stealth</p>
     <p class="body">We’re developing a new ergonomic solution for ENT procedures. The product is currently in stealth; details are under wraps for now. Check back soon.</p>
   </div>
   <img src="assets/img/ent-stealth.jpg" alt="Blurred preview with a lock: product in stealth">
@@ -452,9 +450,9 @@ page("news.html", "Latest News", "News and milestones from Pando Surgical.", "ne
 
 # ---------------------------------------------------------------- About – Company
 VALUES = [
-    ("Equity", "Built for every surgeon.", "Most surgical tools were designed around one kind of hand. We design for every body and every hand in the OR, because every surgeon deserves to feel supported.", "Surgeon in scrubs and mask during an operation"),
-    ("Efficiency", "Less friction in the OR.", "We streamline surgical workflows, so teams spend less time fighting their tools and more time focused on the patient.", "Surgical team working in the operating room"),
-    ("Ergonomics", "Tools that fit the body.", "We build around how surgeons actually move, so the intersection between human and technology feels seamless.", "Surgeon's hands using an instrument"),
+    ("Equity", "Most surgical tools were designed around one kind of hand. We design for every body and every hand in the OR, because every surgeon deserves to feel supported.", "Surgeon in scrubs and mask during an operation"),
+    ("Efficiency", "We streamline surgical workflows, so teams spend less time fighting their tools and more time focused on the patient.", "Surgical team working in the operating room"),
+    ("Ergonomics", "We build around how surgeons actually move, so the intersection between human and technology feels seamless.", "Surgeon's hands using an instrument"),
 ]
 page("about.html", "About", "Pando Surgical believes surgery should be equitable, efficient, and ergonomic.", "about", f"""
 <section class="about-hero">
@@ -476,7 +474,7 @@ page("about.html", "About", "Pando Surgical believes surgery should be equitable
     <p>Three principles shape every tool we build, from the first sketch to the operating room.</p>
   </div>
   <div class="values-grid">
-    {"".join(f'''<article class="value reveal"><img src="assets/img/value-{i}.jpg" alt="{alt}" loading="lazy"><div class="value-text"><h3>{t}</h3><p class="tag">{tag}</p><p class="body">{b}</p></div></article>''' for i, (t, tag, b, alt) in enumerate(VALUES, 1))}
+    {"".join(f'''<article class="value reveal"><img src="assets/img/value-{i}.jpg" alt="{alt}" loading="lazy"><div class="value-text"><h3>{t}</h3><p class="body">{b}</p></div></article>''' for i, (t, b, alt) in enumerate(VALUES, 1))}
   </div>
 </section>
 
