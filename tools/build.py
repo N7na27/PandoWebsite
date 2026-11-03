@@ -502,6 +502,7 @@ page("careers.html", "Careers", "Join Pando Surgical: we're opening an internshi
 page("contact.html", "Contact Us", "Get in touch with Pando Surgical: surgeons, hospitals, partners and press.", "contact", f"""
 <section class="contact">
   <div class="contact-art">
+    <div class="contact-motion" aria-hidden="true"><span class="b1"></span><span class="b2"></span><span class="b3"></span></div>
     <h1>Connect with us.</h1>
     <p>From surgeons, to hospitals, to partners and press, we read every message.</p>
   </div>
