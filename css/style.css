@@ -119,6 +119,8 @@ p { font-weight: 400; }
   height: 52px; padding: 0 28px 0 20px;
 }
 .nav-logo { color: #fff; display: flex; }
+/* Figma Nav: 20px Pando mark */
+.nav-logo svg { width: 20px; height: 20px; }
 .nav-links { display: flex; align-items: center; gap: 36px; height: 100%; }
 .nav-right { display: flex; align-items: center; gap: 32px; }
 .nav-util { display: flex; align-items: center; gap: 32px; height: 52px; padding: 0 20px; }
