@@ -266,6 +266,7 @@ page("index.html", "Home", "Pando Surgical makes ergonomic surgical tools that a
 # ---------------------------------------------------------------- LapRotator
 page("laprotator.html", "LapRotator", "LapRotator: an attachment for laparoscopes that gives surgeons intuitive, single-handed scope rotation.", "laprotator", f"""
 <section class="lr-hero">
+  <div class="lr-art"><div class="lr-float"><img src="assets/img/laprotator-device.webp" alt="LapRotator attached to a laparoscope" width="1889" height="832"></div></div>
   <div class="lr-hero-text">
     <h1>LapRotator</h1>
     <p>One-Handed Laparoscope Rotation: an attachment for laparoscopes that gives surgeons intuitive, single-handed control.</p>

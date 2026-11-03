@@ -268,6 +268,44 @@
     });
   });
 
+  /* ---------- LapRotator hero: float on hover (Figma "LapRotator Hover Drift") ----------
+     Mouse in: rises 12px (800ms ease-out), then circles up, right, down, left, 12px each step (1.4s ease-in-out).
+     Mouse out: settles back to rest (800ms ease-out). */
+  var lrHero = document.querySelector(".lr-hero");
+  var lrFloat = lrHero && lrHero.querySelector(".lr-float");
+  if (lrFloat && !reduceMotion && lrFloat.animate) {
+    var orbit = [[0, -12], [12, 0], [0, 12], [-12, 0]];
+    var step = 0, floatAnim = null, hovering = false;
+    var currentOffset = function () {
+      var t = getComputedStyle(lrFloat).translate;
+      if (!t || t === "none") return [0, 0];
+      var p = t.split(" ").map(parseFloat);
+      return [p[0] || 0, p[1] || 0];
+    };
+    var moveTo = function (to, duration, easing, then) {
+      var from = currentOffset();
+      if (floatAnim) floatAnim.cancel();
+      floatAnim = lrFloat.animate(
+        [{ translate: from[0] + "px " + from[1] + "px" }, { translate: to[0] + "px " + to[1] + "px" }],
+        { duration: duration, easing: easing, fill: "forwards" }
+      );
+      floatAnim.onfinish = then || null;
+    };
+    var next = function () {
+      if (!hovering) return;
+      step = (step + 1) % orbit.length;
+      moveTo(orbit[step], 1400, "ease-in-out", next);
+    };
+    lrHero.addEventListener("mouseenter", function () {
+      hovering = true; step = 0;
+      moveTo(orbit[0], 800, "ease-out", next);
+    });
+    lrHero.addEventListener("mouseleave", function () {
+      hovering = false;
+      moveTo([0, 0], 800, "ease-out");
+    });
+  }
+
   /* ---------- Demo videos: stay still for people who ask for reduced motion ---------- */
   if (reduceMotion) {
     document.querySelectorAll("video[autoplay]").forEach(function (v) { v.removeAttribute("autoplay"); v.pause(); });

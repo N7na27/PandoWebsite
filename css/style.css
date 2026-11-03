@@ -338,10 +338,17 @@ p { font-weight: 400; }
 .lr-hero {
   position: relative; height: clamp(560px, 100vh, 875px); height: clamp(560px, 100svh, 875px);
   display: flex; align-items: center; padding: 112px 0 40px 135px;
-  background: var(--dark) url("../assets/img/laprotator-hero.jpg") center / cover no-repeat;
-  color: var(--on-dark);
+  background: var(--dark) url("../assets/img/laprotator-hero-bg.jpg") center / cover no-repeat;
+  color: var(--on-dark); overflow: hidden;
 }
-.lr-hero-text { position: relative; max-width: 760px; display: flex; flex-direction: column; gap: 20px; align-items: flex-start; }
+/* The LapRotator render sits on its own layer (Figma "Hero" > "laprotator image"), so it can float.
+   Sizes follow the 1512px Figma frame, scaled with the section width. Hover anywhere on the hero
+   starts the float (js/main.js, Figma "LapRotator Hover Drift") */
+/* Full-size layer so the render scales with the whole section width (cqw), not the padded content */
+.lr-art { position: absolute; inset: 0; z-index: 0; pointer-events: none; container-type: inline-size; }
+.lr-float { position: absolute; left: -21.79cqw; bottom: -15.31cqw; width: 124.93cqw; z-index: 0; pointer-events: none; will-change: translate; }
+.lr-float img { display: block; width: 100%; height: auto; rotate: 5.87deg; filter: drop-shadow(5px 17px 19px rgba(0, 0, 0, 0.15)); }
+.lr-hero-text { position: relative; z-index: 1; max-width: 760px; display: flex; flex-direction: column; gap: 20px; align-items: flex-start; }
 .lr-hero h1 { font-size: 80px; line-height: 1.1; }
 .lr-hero p { font-size: 22px; line-height: 1.5; color: rgba(var(--on-dark-rgb), 0.7); }
 .lr-hero .btn { margin-top: 28px; }
