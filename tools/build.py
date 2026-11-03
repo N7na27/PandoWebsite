@@ -250,7 +250,7 @@ page("index.html", "Home", "Pando Surgical makes ergonomic surgical tools that a
     <h2>One root.<br>Every surgeon.</h2>
     <p class="body">Pando is one of the largest living organisms on Earth: a single aspen with one shared root system and tens of thousands of trunks. Pando Surgical works the same way. Our commitment to ergonomics runs underneath every tool, supporting every surgeon with all body types and specialties.</p>
   </div>
-  <div class="placeholder">Aspen grove / root-system imagery</div>
+  <img class="grove-img" src="assets/img/grove.jpg" alt="Aspen grove with white trunks and golden autumn undergrowth" width="640" height="520" loading="lazy">
 </section>
 
 <section class="cta on-dark">
@@ -292,8 +292,8 @@ page("laprotator.html", "LapRotator", "LapRotator: an attachment for laparoscope
   <div class="tab-panel" role="tabpanel" id="panel-diff" aria-labelledby="tab-diff">
     <h3>LapRotator – See the Difference</h3>
     <div class="compare">
-      <figure><img src="assets/img/compare-1.jpg" alt="Surgeon's hand holding a laparoscope without LapRotator" loading="lazy"><figcaption>Without LapRotator</figcaption></figure>
-      <figure><img src="assets/img/compare-2.jpg" alt="Surgeon's hand holding a laparoscope with LapRotator V2 attached" loading="lazy"><figcaption>With LapRotator V2</figcaption></figure>
+      <figure><video src="assets/video/compare-1.mp4" poster="assets/video/compare-1.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Surgeon rotating a laparoscope by hand, without LapRotator"></video><figcaption>Without LapRotator</figcaption></figure>
+      <figure><video src="assets/video/compare-2.mp4" poster="assets/video/compare-2.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Surgeon rotating a laparoscope one-handed with LapRotator V2 attached"></video><figcaption>With LapRotator V2</figcaption></figure>
     </div>
   </div>
   <div class="tab-panel" role="tabpanel" id="panel-feat" aria-labelledby="tab-feat" hidden>

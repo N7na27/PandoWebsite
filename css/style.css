@@ -179,7 +179,7 @@ p { font-weight: 400; }
 .footer {
   position: relative; overflow: hidden; isolation: isolate;
   background: var(--dark); color: var(--on-dark);
-  padding: 129px var(--pad) 84px;
+  padding: 129px var(--pad) 89px;
 }
 /* Soft blurred color blobs, matching the Figma footer */
 .footer-glow { position: absolute; inset: 0; pointer-events: none; }
@@ -193,7 +193,8 @@ p { font-weight: 400; }
 .footer-glow .g2 { left: -494px; bottom: -1201px; width: 1468px; height: 1468px; background: #d55d36; filter: blur(75px); }
 .footer-glow .g3 { left: -557px; bottom: -1248px; width: 1423px; height: 1423px; background: #e7ab03; filter: blur(60px); }
 
-.footer-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 56px; }
+/* Spacing follows the Figma footer (724px tall at 1512px): top row 215px, wordmark at 409px, socials at 605px */
+.footer-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 56px; min-height: 215px; }
 .footer-brand {
   border-top: 1px solid var(--on-dark);
   padding: 10px 0; width: 374px; max-width: 100%;
@@ -216,7 +217,8 @@ p { font-weight: 400; }
 .social svg { width: 30px; height: 30px; }
 .social .bg { fill: #868686; fill-opacity: 0.15; transition: fill 150ms ease-out, fill-opacity 150ms ease-out; }
 .social:hover .bg { fill: #b07c00; fill-opacity: 1; }
-.footer-right { display: flex; flex-direction: column; align-items: flex-end; gap: 16px; text-align: right; font-size: 16px; padding-bottom: 5px; }
+/* Legal links start at 494px and the copyright line at 620px, ending 5px below the social icons */
+.footer-right { display: flex; flex-direction: column; align-items: flex-end; gap: 35px; text-align: right; font-size: 16px; margin-bottom: -6px; }
 .footer-legal { display: flex; flex-direction: column; align-items: flex-end; gap: 15px; }
 .footer-legal a { opacity: 0.7; transition: opacity 150ms ease-out; }
 .footer-legal a:hover { opacity: 1; }
@@ -317,7 +319,8 @@ p { font-weight: 400; }
 .grove .label { color: var(--contrast); }
 .grove h2 { font-size: 56px; line-height: 1.1; }
 .grove p.body { font-size: 20px; line-height: 1.55; opacity: 0.75; }
-.grove .placeholder { width: 640px; height: 520px; background: rgba(160, 154, 150, 0.2); flex: none; }
+/* Figma crops the photo to its lower part: full width, bottom aligned */
+.grove-img { width: 640px; height: 520px; flex: none; object-fit: cover; object-position: center bottom; border-radius: 3px; }
 
 .cta {
   padding: 140px var(--pad); text-align: center;
@@ -361,7 +364,7 @@ p { font-weight: 400; }
 .tab-panel h3 { font-size: 36px; margin-bottom: 40px; }
 .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
 .compare figure { margin: 0; display: flex; flex-direction: column; gap: 24px; }
-.compare img { width: 100%; height: 380px; object-fit: cover; border-radius: 5px; }
+.compare video { display: block; width: 100%; height: 380px; object-fit: cover; border-radius: 3px; background: #111; }
 .compare figcaption { font-size: 28px; font-weight: 500; color: rgba(46, 49, 53, 0.55); }
 .compare figure:last-child figcaption { color: var(--accent); }
 .tab-panel .placeholder { min-height: 380px; background: rgba(160, 154, 150, 0.12); }
@@ -384,10 +387,11 @@ p { font-weight: 400; }
 .member { position: relative; flex: 0 1 300px; min-width: 0; background: var(--dark); color: var(--on-dark); border-radius: 8px; overflow: hidden; }
 .member .photo { display: block; overflow: hidden; }
 .member .photo img { display: block; width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; }
-/* Hover (Figma Ver2 "Team Member / Hover"): a soft shadow fades in. No border, no lift, no photo zoom */
-.member.reveal { transition: opacity 600ms ease-out, transform 600ms ease-out, box-shadow 400ms var(--ease-soft); }
+/* Hover (Figma "Team Member / Hover"): the card rises 6px and a soft shadow fades in. No border, no photo zoom.
+   The lift uses `translate` so it does not fight the reveal animation's `transform` */
+.member.reveal { transition: opacity 600ms ease-out, transform 600ms ease-out, translate 400ms var(--ease-soft), box-shadow 400ms var(--ease-soft); }
 /* Mouse hover, or keyboard focus on the LinkedIn link. A mouse click on the link does not leave the shadow on */
-.member:hover, .member:has(:focus-visible) { box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12), 0 18px 40px rgba(0, 0, 0, 0.3); }
+.member:hover, .member:has(:focus-visible) { translate: 0 -6px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12), 0 18px 40px rgba(0, 0, 0, 0.3); }
 .member-info { padding: 20px 24px; display: flex; flex-direction: column; gap: 14px; }
 .member-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
 .member h3 { font-size: 28px; letter-spacing: -0.28px; line-height: 1.15; }
@@ -591,7 +595,8 @@ input::placeholder, textarea::placeholder { color: rgba(46, 49, 53, 0.4); }
   .footer-top { flex-wrap: wrap; }
   .footer-bottom { flex-direction: column; align-items: flex-start; }
   .footer-right, .footer-legal { align-items: flex-start; text-align: left; }
-  .grove .placeholder { width: 46%; }
+  .footer-right { margin-bottom: 0; }
+  .grove-img { width: 46%; }
   .ent img { width: 44%; height: auto; aspect-ratio: 560 / 440; }
   .contact-art { padding: 0 64px clamp(56px, 10vh, 96px); }
   .contact-form { padding: 128px 64px 40px; }
@@ -606,7 +611,7 @@ input::placeholder, textarea::placeholder { color: rgba(46, 49, 53, 0.4); }
   .rolling, .rolling-track span { height: 74px; line-height: 64px; }
   .hero-content { bottom: 220px; }
   .why, .product, .grove, .story, .investors, .ent { flex-direction: column; align-items: flex-start; }
-  .grove .placeholder, .product .placeholder { width: 100%; max-width: 640px; height: 420px; }
+  .grove-img, .product .placeholder { width: 100%; max-width: 640px; height: 420px; }
   .ent img { width: 100%; max-width: 560px; }
   .story img { width: 100%; max-width: 423px; height: auto; }
   .resources { width: 100%; margin-top: 0; }
@@ -674,7 +679,7 @@ input::placeholder, textarea::placeholder { color: rgba(46, 49, 53, 0.4); }
   .details { padding: 24px var(--pad) 96px; }
   .tabs { gap: 28px; }
   .compare { grid-template-columns: 1fr; }
-  .compare img { height: 240px; }
+  .compare video { height: 240px; }
   .compare figcaption { font-size: 22px; }
   .tab-panel h3 { font-size: 28px; }
   .ent { padding: 140px var(--pad) 80px; min-height: 0; }

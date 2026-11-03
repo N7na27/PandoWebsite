@@ -242,4 +242,9 @@
       if (note) note.textContent = form.getAttribute("data-demo");
     });
   });
+
+  /* ---------- Demo videos: stay still for people who ask for reduced motion ---------- */
+  if (reduceMotion) {
+    document.querySelectorAll("video[autoplay]").forEach(function (v) { v.removeAttribute("autoplay"); v.pause(); });
+  }
 })();
