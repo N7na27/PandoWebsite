@@ -141,16 +141,17 @@ p { font-weight: 400; }
 .dd { position: relative; height: 52px; display: flex; align-items: center; }
 .dd-panel {
   position: absolute; top: 66px; left: -32px;
-  display: flex; gap: 48px; padding: 20px 32px;
+  display: flex; flex-direction: column; align-items: flex-start; gap: 16px; padding: 20px 32px;
   white-space: nowrap;
-  opacity: 0; visibility: hidden; transform: translateY(-4px);
-  transition: opacity 200ms ease-out, transform 200ms ease-out, visibility 0s linear 200ms;
+  /* Links stack vertically and the panel unfolds downward from the nav (Figma "Product open" / "About open") */
+  opacity: 0; visibility: hidden; clip-path: inset(0 0 100% 0 round var(--radius-ui));
+  transition: clip-path 280ms var(--ease-soft), opacity 200ms ease-out, visibility 0s linear 280ms;
 }
 /* bridge so the panel stays open while the pointer moves down to it */
 .dd-panel::before { content: ""; position: absolute; left: 0; right: 0; top: -16px; height: 16px; }
 .dd.is-open .dd-panel {
-  opacity: 1; visibility: visible; transform: none;
-  transition: opacity 200ms ease-out, transform 200ms ease-out;
+  opacity: 1; visibility: visible; clip-path: inset(-16px 0 0 0 round var(--radius-ui));
+  transition: clip-path 280ms var(--ease-soft), opacity 200ms ease-out;
 }
 .dd-panel a { font-size: 18px; color: #fff; opacity: 0.85; transition: opacity 150ms ease-out; }
 .dd-panel a:hover, .dd-panel a.is-current { opacity: 1; }
@@ -706,7 +707,7 @@ input::placeholder, textarea::placeholder { color: rgba(46, 49, 53, 0.4); }
   .nav.menu-open .dd { flex-direction: column; align-items: flex-start; height: auto !important; }
   .nav.menu-open .dd > .nav-link { display: none; }
   .nav.menu-open .dd-panel {
-    position: static; opacity: 1; visibility: visible; transform: none; display: flex; flex-direction: column; gap: 4px;
+    position: static; opacity: 1; visibility: visible; transform: none; clip-path: none; display: flex; flex-direction: column; gap: 4px;
     padding: 0; background: none; border: 0; backdrop-filter: none; -webkit-backdrop-filter: none;
   }
   .nav.menu-open .dd-panel a { height: 44px; display: flex; align-items: center; font-size: 17px; }
