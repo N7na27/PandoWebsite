@@ -269,7 +269,7 @@ p { font-weight: 400; }
 .hero h1 { font-size: 75px; line-height: 79px; font-weight: 500; }
 .rolling { display: block; height: 92px; overflow: hidden; position: relative; }
 .rolling-track { display: block; transition: transform 600ms cubic-bezier(.65, 0, .35, 1); }
-.rolling-track span { display: block; height: 92px; line-height: 79px; color: var(--on-dark); }
+.rolling-track span { display: block; height: 92px; line-height: 79px; color: var(--accent); }
 .hero-sub { font-size: 26px; line-height: 1.35; opacity: 0.9; max-width: 539px; }
 .hero .btn { height: auto; padding: 14px 28px; }
 .trust {
