@@ -351,16 +351,28 @@ p { font-weight: 400; }
 .text-link:hover { color: var(--gold); }
 
 .details { padding: 40px var(--pad) 140px; background: var(--light); }
-.tabs { display: flex; gap: 48px; border-bottom: 1px solid rgba(46, 49, 53, 0.15); overflow-x: auto; }
+/* Tab bar: fixed height, no scrolling. One gold underline slides to the selected tab */
+.tabs { position: relative; display: flex; gap: 48px; border-bottom: 1px solid rgba(46, 49, 53, 0.15); }
 .tab {
-  font-size: 19px; color: rgba(46, 49, 53, 0.55); padding: 4px 0 16px;
-  border-bottom: 3px solid transparent; margin-bottom: -1px; white-space: nowrap;
-  transition: color 150ms ease-out, border-color 150ms ease-out;
+  display: inline-flex; flex-direction: column; align-items: flex-start;
+  font-size: 19px; color: rgba(46, 49, 53, 0.55); padding: 4px 0 19px; white-space: nowrap; text-align: left;
+  transition: color 300ms var(--ease-soft);
 }
+/* Reserve the width of the bold label so selecting a tab never shifts its neighbours */
+.tab::after { content: attr(data-text); font-weight: 500; height: 0; overflow: hidden; visibility: hidden; pointer-events: none; user-select: none; }
 .tab:hover { color: #2e3135; }
-.tab[aria-selected="true"] { color: #2e3135; font-weight: 500; border-bottom-color: var(--accent); }
+.tab[aria-selected="true"] { color: #2e3135; font-weight: 500; }
+.tab-indicator {
+  position: absolute; left: 0; bottom: -1px; width: 0; height: 3px; background: var(--accent); pointer-events: none;
+  transition: transform 450ms var(--ease-soft), width 450ms var(--ease-soft);
+}
+.tab-indicator.no-anim { transition: none; }
+/* Without the script, the selected tab still shows its underline */
+.tabs:not(.has-indicator) .tab[aria-selected="true"] { box-shadow: inset 0 -3px var(--accent); }
 .tab-panel { padding-top: 56px; }
 .tab-panel[hidden] { display: none; }
+.tab-panel.is-entering { animation: tab-in 450ms var(--ease-soft); }
+@keyframes tab-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 .tab-panel h3 { font-size: 36px; margin-bottom: 40px; }
 .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
 .compare figure { margin: 0; display: flex; flex-direction: column; gap: 24px; }
@@ -677,7 +689,9 @@ input::placeholder, textarea::placeholder { color: rgba(46, 49, 53, 0.4); }
   .overview { padding: 80px var(--pad); }
   .overview h2 { font-size: 34px; }
   .details { padding: 24px var(--pad) 96px; }
-  .tabs { gap: 28px; }
+  /* Phones: the three tabs share the width and may wrap to two lines, so the bar never scrolls */
+  .tabs { gap: 12px; }
+  .tab { flex: 1 1 0; min-width: 0; white-space: normal; font-size: 15px; line-height: 1.25; }
   .compare { grid-template-columns: 1fr; }
   .compare video { height: 240px; }
   .compare figcaption { font-size: 22px; }

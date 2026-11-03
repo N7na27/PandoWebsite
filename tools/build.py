@@ -241,7 +241,7 @@ page("index.html", "Home", "Pando Surgical makes ergonomic surgical tools that a
       <div class="proof-item"><img src="assets/icons/icon-shield.svg" alt=""><span>[Certification /<br>status placeholder]</span></div>
     </div>
   </div>
-  <div class="placeholder">LapRotator product 3D model<br>Default: rotating · Hover: stops at the angle</div>
+  <div class="placeholder reveal">LapRotator product 3D model<br>Default: rotating · Hover: stops at the angle</div>
 </section>
 
 <section class="grove">
@@ -250,7 +250,7 @@ page("index.html", "Home", "Pando Surgical makes ergonomic surgical tools that a
     <h2>One root.<br>Every surgeon.</h2>
     <p class="body">Pando is one of the largest living organisms on Earth: a single aspen with one shared root system and tens of thousands of trunks. Pando Surgical works the same way. Our commitment to ergonomics runs underneath every tool, supporting every surgeon with all body types and specialties.</p>
   </div>
-  <img class="grove-img" src="assets/img/grove.jpg" alt="Aspen grove with white trunks and golden autumn undergrowth" width="640" height="520" loading="lazy">
+  <img class="grove-img reveal" src="assets/img/grove.jpg" alt="Aspen grove with white trunks and golden autumn undergrowth" width="640" height="520" loading="lazy">
 </section>
 
 <section class="cta on-dark">
@@ -285,9 +285,9 @@ page("laprotator.html", "LapRotator", "LapRotator: an attachment for laparoscope
 
 <section class="details">
   <div class="tabs" role="tablist" aria-label="LapRotator details">
-    <button class="tab" role="tab" id="tab-diff" aria-controls="panel-diff" aria-selected="true">See the Difference</button>
-    <button class="tab" role="tab" id="tab-feat" aria-controls="panel-feat" aria-selected="false" tabindex="-1">Features and Advantages</button>
-    <button class="tab" role="tab" id="tab-spec" aria-controls="panel-spec" aria-selected="false" tabindex="-1">Specifications</button>
+    <button class="tab" role="tab" id="tab-diff" aria-controls="panel-diff" aria-selected="true" data-text="See the Difference">See the Difference</button>
+    <button class="tab" role="tab" id="tab-feat" aria-controls="panel-feat" aria-selected="false" tabindex="-1" data-text="Features and Advantages">Features and Advantages</button>
+    <button class="tab" role="tab" id="tab-spec" aria-controls="panel-spec" aria-selected="false" tabindex="-1" data-text="Specifications">Specifications</button>
   </div>
   <div class="tab-panel" role="tabpanel" id="panel-diff" aria-labelledby="tab-diff">
     <h3>LapRotator – See the Difference</h3>

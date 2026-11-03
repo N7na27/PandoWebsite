@@ -160,13 +160,38 @@
   /* ---------- Tabs ---------- */
   document.querySelectorAll("[role=tablist]").forEach(function (list) {
     var tabs = Array.prototype.slice.call(list.querySelectorAll("[role=tab]"));
+    // One underline that slides from tab to tab
+    var bar = document.createElement("span");
+    bar.className = "tab-indicator no-anim";
+    bar.setAttribute("aria-hidden", "true");
+    list.appendChild(bar);
+    list.classList.add("has-indicator");
+    function current() { return list.querySelector('[aria-selected="true"]') || tabs[0]; }
+    function place(tab) {
+      bar.style.width = tab.offsetWidth + "px";
+      bar.style.transform = "translateX(" + tab.offsetLeft + "px)";
+    }
+    function placeNow() {
+      bar.classList.add("no-anim");
+      place(current());
+      void bar.offsetWidth; // apply the jump before turning the slide back on
+      bar.classList.remove("no-anim");
+    }
+    placeNow();
+    window.addEventListener("resize", placeNow);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(placeNow);
     function select(tab) {
+      if (tab === current()) return;
       tabs.forEach(function (t) {
         var on = t === tab;
+        var panel = document.getElementById(t.getAttribute("aria-controls"));
         t.setAttribute("aria-selected", on ? "true" : "false");
         t.tabIndex = on ? 0 : -1;
-        document.getElementById(t.getAttribute("aria-controls")).hidden = !on;
+        panel.hidden = !on;
+        panel.classList.remove("is-entering");
+        if (on) { void panel.offsetWidth; panel.classList.add("is-entering"); }
       });
+      place(tab);
     }
     tabs.forEach(function (tab, idx) {
       tab.addEventListener("click", function () { select(tab); });
