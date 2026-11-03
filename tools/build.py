@@ -229,6 +229,10 @@ def btn(text, href, kind="primary"):
 
 
 # ---------------------------------------------------------------- Landing
+# three.js for the LapRotator 3D model (js/model.js). Pinned version from jsDelivr.
+THREE = "https://cdn.jsdelivr.net/npm/three@0.160.0"
+MODEL_SCRIPTS = f"""<script type="importmap">{{"imports":{{"three":"{THREE}/build/three.module.min.js","three/addons/":"{THREE}/examples/jsm/"}}}}</script>
+<script type="module" src="js/model.js"></script>"""
 LOGOS = [("logo-iowa", "University of Iowa", 138), ("logo-uthealth", "UTHealth Houston", 191),
          ("logo-keck", "Keck Medicine of USC", 189), ("logo-17", "University medical center", 224),
          ("logo-18", "University medical center", 108), ("logo-1", "University medical center", 225)]
@@ -279,7 +283,9 @@ page("index.html", "Home", "Pando Surgical makes ergonomic surgical tools that a
       <div class="proof-item"><img src="assets/icons/icon-shield.svg" alt=""><span>[Certification /<br>status placeholder]</span></div>
     </div>
   </div>
-  <div class="placeholder reveal">LapRotator product 3D model<br>Default: rotating · Hover: stops at the angle</div>
+  <div class="lr-model reveal" tabindex="0" role="img" aria-label="3D model of the LapRotator on a laparoscope, turning around the scope. Hover or focus to stop it.">
+    <img class="lr-model-poster" src="assets/model/laprotator-poster.webp" alt="" width="848" height="540">
+  </div>
 </section>
 
 <section class="grove">
@@ -299,7 +305,7 @@ page("index.html", "Home", "Pando Surgical makes ergonomic surgical tools that a
     {btn("Press inquiries", f"mailto:{EMAIL}?subject=Press%20inquiry", "outline")}
   </div>
 </section>
-""")
+""", extra=MODEL_SCRIPTS)
 
 # ---------------------------------------------------------------- LapRotator
 page("laprotator.html", "LapRotator", "LapRotator: an attachment for laparoscopes that gives surgeons intuitive, single-handed scope rotation.", "laprotator", f"""

@@ -100,7 +100,9 @@
       <div class="proof-item"><img src="assets/icons/icon-shield.svg" alt=""><span>[Certification /<br>status placeholder]</span></div>
     </div>
   </div>
-  <div class="placeholder reveal">LapRotator product 3D model<br>Default: rotating · Hover: stops at the angle</div>
+  <div class="lr-model reveal" tabindex="0" role="img" aria-label="3D model of the LapRotator on a laparoscope, turning around the scope. Hover or focus to stop it.">
+    <img class="lr-model-poster" src="assets/model/laprotator-poster.webp" alt="" width="848" height="540">
+  </div>
 </section>
 
 <section class="grove">
@@ -194,7 +196,8 @@
     </form>
   </div>
 </div>
-
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.min.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+<script type="module" src="js/model.js"></script>
 <script src="js/main.js"></script>
 </body>
 </html>

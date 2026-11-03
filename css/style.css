@@ -331,7 +331,24 @@ p { font-weight: 400; }
   border: 1px dashed rgba(160, 154, 150, 0.6); border-radius: 4px;
   color: var(--grey); font-size: 16px; line-height: 1.5; padding: 32px;
 }
-.product .placeholder { width: 430px; height: 540px; background: rgba(255, 255, 255, 0.35); flex: none; }
+/* LapRotator 3D model (js/model.js). Spins around the scope; stops on hover or keyboard focus.
+   The box fills the right side out to the page edge. The canvas reaches --lr-bleed further left,
+   under the text gap, so the scope can trail off and fade like the product render. */
+.lr-model {
+  --lr-bleed: 240px;
+  position: relative; flex: 1 1 0; min-width: 0; height: 540px;
+  margin-right: calc(-1 * var(--pad)); outline-offset: -4px;
+}
+.lr-model-poster, .lr-model canvas {
+  position: absolute; top: 0; right: 0; left: calc(-1 * var(--lr-bleed));
+  width: calc(100% + var(--lr-bleed)); height: 100%; pointer-events: none;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 calc(var(--lr-bleed) + 120px));
+  mask-image: linear-gradient(90deg, transparent, #000 calc(var(--lr-bleed) + 120px));
+}
+.lr-model-poster { object-fit: cover; object-position: right center; transition: opacity 600ms var(--ease-soft); }
+.lr-model canvas { opacity: 0; transition: opacity 600ms var(--ease-soft); }
+.lr-model.is-live canvas { opacity: 1; }
+.lr-model.is-live .lr-model-poster { opacity: 0; }
 .spin { animation: spin 14s linear infinite; }
 
 .grove {
@@ -692,7 +709,11 @@ input::placeholder, textarea::placeholder { color: rgba(46, 49, 53, 0.4); }
   .rolling, .rolling-track span { height: 74px; line-height: 64px; }
   .hero-content { bottom: 220px; }
   .why, .product, .grove, .story, .investors, .ent { flex-direction: column; align-items: flex-start; }
-  .grove-img, .product .placeholder { width: 100%; max-width: 640px; height: 420px; }
+  .grove-img { width: 100%; max-width: 640px; height: 420px; }
+  .lr-model {
+    --lr-bleed: 0px; flex: none; align-self: stretch;
+    height: clamp(260px, 56vw, 480px); margin: 0 calc(-1 * var(--pad));
+  }
   .ent img { width: 100%; max-width: 560px; }
   .story img { width: 100%; max-width: 423px; height: auto; }
   .resources { width: 100%; margin-top: 0; }
