@@ -237,8 +237,9 @@ p { font-weight: 400; }
    bar starts right below it (131px more of hero), so it only appears on scroll.
    The first screen is the viewport height, between 600px and 852px. */
 .hero {
-  position: relative; height: calc(clamp(600px, 100vh, 852px) + 131px); height: calc(clamp(600px, 100svh, 852px) + 131px);
-  background: var(--dark) url("../assets/img/hero-bg.jpg") center top / cover no-repeat;
+  position: relative; height: calc(max(600px, 100vh) + 131px); height: calc(max(600px, 100svh) + 131px);
+  /* 46% shows Figma's crop at 1512x983; taller screens reveal more of the photo */
+  background: var(--dark) url("../assets/img/hero-bg.jpg") center 46% / cover no-repeat;
   color: var(--on-dark); overflow: hidden;
 }
 .hero-fade { position: absolute; left: 0; right: 0; bottom: 0; height: 440px; background: var(--hero-fade); }
@@ -336,7 +337,7 @@ p { font-weight: 400; }
 /* ---------- LapRotator ---------- */
 /* First screens fit the viewport and center their content below the nav (112px) */
 .lr-hero {
-  position: relative; height: clamp(560px, 100vh, 875px); height: clamp(560px, 100svh, 875px);
+  position: relative; height: max(560px, 100vh); height: max(560px, 100svh);
   display: flex; align-items: center; padding: 112px 0 40px 135px;
   background: var(--dark) url("../assets/img/laprotator-hero-bg.jpg") center / cover no-repeat;
   color: var(--on-dark); overflow: hidden;
@@ -395,7 +396,7 @@ p { font-weight: 400; }
 .page-main { padding-top: 172px; background: var(--light); }
 .page-title { font-size: 64px; line-height: 1.1; }
 
-.ent { min-height: clamp(640px, 100vh, 915px); min-height: clamp(640px, 100svh, 915px); padding: 132px var(--pad) 40px 100px; display: flex; justify-content: space-between; align-items: center; gap: 64px; }
+.ent { min-height: max(640px, 100vh); min-height: max(640px, 100svh); padding: 132px var(--pad) 40px 100px; display: flex; justify-content: space-between; align-items: center; gap: 64px; }
 .ent-text { display: flex; flex-direction: column; gap: 24px; max-width: 651px; }
 .ent h1 { font-size: 80px; line-height: 1.1; max-width: 567px; }
 .eyebrow { font-size: 15px; font-weight: 500; color: var(--gold); letter-spacing: 2.7px; text-transform: uppercase; }
@@ -519,7 +520,7 @@ input::placeholder, textarea::placeholder { color: rgba(46, 49, 53, 0.4); }
 
 /* ---------- About ---------- */
 .about-hero {
-  position: relative; height: clamp(560px, 100vh, 977px); height: clamp(560px, 100svh, 977px); display: flex; align-items: center; justify-content: center;
+  position: relative; height: max(560px, 100vh); height: max(560px, 100svh); display: flex; align-items: center; justify-content: center;
   background: var(--dark) url("../assets/img/about-hero.jpg") center / cover no-repeat;
   color: var(--on-dark); text-align: center; padding: 0 var(--pad);
 }
@@ -544,7 +545,7 @@ input::placeholder, textarea::placeholder { color: rgba(46, 49, 53, 0.4); }
 .team-cta p { font-size: 20px; line-height: 1.5; color: rgba(var(--on-dark-rgb), 0.7); max-width: 620px; margin-top: -16px; }
 
 /* ---------- Investors ---------- */
-.investors { min-height: 923px; padding: 230px var(--pad) 120px; display: flex; justify-content: space-between; gap: 64px; background: var(--light); }
+.investors { min-height: max(640px, 100vh); min-height: max(640px, 100svh); padding: 230px var(--pad) 120px; display: flex; justify-content: space-between; gap: 64px; background: var(--light); }
 .inv-intro { display: flex; flex-direction: column; gap: 24px; align-items: flex-start; }
 .inv-intro h1 { font-size: 64px; line-height: 1.1; max-width: 520px; }
 .inv-intro .sub { font-size: 20px; color: rgba(46, 49, 53, 0.65); }
@@ -570,7 +571,7 @@ input::placeholder, textarea::placeholder { color: rgba(46, 49, 53, 0.4); }
 .counter.over { color: var(--red); }
 
 /* ---------- Contact ---------- */
-.contact { display: grid; grid-template-columns: 1fr 1fr; height: clamp(720px, 100vh, 923px); height: clamp(720px, 100svh, 923px); background: var(--light); }
+.contact { display: grid; grid-template-columns: 1fr 1fr; height: max(720px, 100vh); height: max(720px, 100svh); background: var(--light); }
 .contact-art {
   position: relative; color: #fff; overflow: hidden; isolation: isolate;
   background: #2e3135;
@@ -685,7 +686,8 @@ input::placeholder, textarea::placeholder { color: rgba(46, 49, 53, 0.4); }
   .trust p { width: auto; }
   .marquee { width: 100%; max-width: none; margin: 0; }
   .contact { grid-template-columns: 1fr; height: auto; }
-  .contact-art { min-height: 520px; }
+  /* Stacked layout: the gradient panel fills the first screen, the form follows */
+  .contact-art { min-height: 100svh; }
   .contact-form { padding: 64px; }
 }
 
@@ -743,7 +745,7 @@ input::placeholder, textarea::placeholder { color: rgba(46, 49, 53, 0.4); }
   .compare video { height: 240px; }
   .compare figcaption { font-size: 22px; }
   .tab-panel h3 { font-size: 28px; }
-  .ent { padding: 140px var(--pad) 80px; min-height: 0; }
+  .ent { padding: 140px var(--pad) 80px; min-height: 100svh; }
   .team, .news { padding: 130px var(--pad) 96px; }
   .team h2 { margin-top: 96px; font-size: 40px; }
   .team-grid { margin-top: 48px; }
@@ -755,11 +757,11 @@ input::placeholder, textarea::placeholder { color: rgba(46, 49, 53, 0.4); }
   .values { padding: 72px var(--pad) 96px; }
   .value h3 { font-size: 32px; }
   .value img { height: 380px; }
-  .investors { padding: 140px var(--pad) 96px; min-height: 0; }
+  .investors { padding: 140px var(--pad) 96px; min-height: 100svh; }
   .res-row { flex-wrap: wrap; }
   .careers { padding: 140px var(--pad) 96px; }
   .row-2 { grid-template-columns: 1fr; }
-  .contact-art { padding: 0 var(--pad) 64px; min-height: 460px; }
+  .contact-art { padding: 0 var(--pad) 64px; }
   .contact-art h1 { font-size: 38px; }
   .contact-form { padding: 56px var(--pad) 96px; }
   .legal { padding: 140px var(--pad) 96px; }
