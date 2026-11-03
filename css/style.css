@@ -338,7 +338,10 @@ p { font-weight: 400; }
   --lr-bleed: 240px;
   position: relative; flex: 1 1 0; min-width: 0; height: 540px;
   margin-right: calc(-1 * var(--pad)); outline-offset: -4px;
+  touch-action: pan-y; user-select: none; -webkit-user-select: none;
 }
+.lr-model.is-live { cursor: grab; }
+.lr-model.is-dragging { cursor: grabbing; }
 .lr-model-poster, .lr-model canvas {
   position: absolute; top: 0; right: 0; left: calc(-1 * var(--lr-bleed));
   width: calc(100% + var(--lr-bleed)); height: 100%; pointer-events: none;

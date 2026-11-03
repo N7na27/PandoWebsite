@@ -283,7 +283,7 @@ page("index.html", "Home", "Pando Surgical makes ergonomic surgical tools that a
       <div class="proof-item"><img src="assets/icons/icon-shield.svg" alt=""><span>[Certification /<br>status placeholder]</span></div>
     </div>
   </div>
-  <div class="lr-model reveal" tabindex="0" role="img" aria-label="3D model of the LapRotator on a laparoscope, turning around the scope. Hover or focus to stop it.">
+  <div class="lr-model reveal" tabindex="0" role="img" aria-label="3D model of the LapRotator on a laparoscope, turning around the scope. Hover or focus to stop it; drag or use the left and right arrow keys to turn it.">
     <img class="lr-model-poster" src="assets/model/laprotator-poster.webp" alt="" width="848" height="540">
   </div>
 </section>
