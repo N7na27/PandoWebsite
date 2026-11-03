@@ -122,6 +122,44 @@ FOOTER = f"""<footer class="footer">
   </div>
 </footer>"""
 
+# Simple footer (Figma "Footer"): used on every page except Home, which keeps the gradient footer
+FOOTER_SIMPLE = f"""<footer class="footer-simple">
+  <div class="fs-top">
+    <div class="fs-brand">
+      <p>Making surgical tools equitable, efficient, and ergonomic.</p>
+      <div class="socials">
+        {social("linkedin", "Pando Surgical on LinkedIn", COMPANY_LINKEDIN)}
+        {social("youtube", "Pando Surgical on YouTube", COMPANY_YOUTUBE)}
+      </div>
+    </div>
+    <div class="fs-right">
+      <div class="footer-cols">
+        <div class="footer-col">
+          <h2>Product</h2>
+          <ul><li><a href="laprotator.html">LapRotator</a></li><li><a href="ent.html">ENT Product</a></li></ul>
+        </div>
+        <div class="footer-col">
+          <h2>Company</h2>
+          <ul><li><a href="about.html">About</a></li><li><a href="team.html">Team</a></li><li><a href="news.html">News</a></li><li><a href="careers.html">Careers</a></li></ul>
+        </div>
+        <div class="footer-col">
+          <h2>Connect</h2>
+          <ul><li><a href="investors.html">Investors</a></li><li><a href="contact.html">Contact Us</a></li></ul>
+        </div>
+      </div>
+      <a href="index.html" class="fs-mark" aria-label="Pando Surgical home">{svg("footer-mark")}</a>
+    </div>
+  </div>
+  <div class="fs-bottom">
+    <small>© 2026 Pando Surgical, Inc. All rights reserved.</small>
+    <nav class="fs-legal" aria-label="Legal">
+      <a href="privacy.html">Privacy Notice</a>
+      <a href="terms.html">Terms of Use</a>
+      <a href="accessibility.html">Accessibility Statement</a>
+    </nav>
+  </div>
+</footer>"""
+
 GOOGLE_G = """<svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-7.9l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg>"""
 
 LOGIN = f"""<div class="modal" id="login" role="dialog" aria-modal="true" aria-labelledby="login-title" aria-hidden="true">
@@ -176,7 +214,7 @@ def page(filename, title, description, page_id, main, light=False, extra=""):
 <main id="main">
 {main}
 </main>
-{FOOTER}
+{FOOTER if page_id == "home" else FOOTER_SIMPLE}
 {LOGIN}
 {extra}
 <script src="js/main.js"></script>
