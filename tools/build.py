@@ -277,9 +277,9 @@ page("index.html", "Home", "Pando Surgical makes ergonomic surgical tools that a
     <h2>Built for surgical needs.<br>Introducing LapRotator</h2>
     {btn("Learn more about LapRotator", "laprotator.html", "dark")}
     <div class="proof">
-      <div class="proof-item"><img src="assets/icons/icon-people.svg" alt=""><span>Requested by<br>surgeons</span></div>
-      <div class="proof-item"><img src="assets/icons/icon-hand.svg" alt=""><span>Designed for<br>every hand</span></div>
-      <div class="proof-item"><img src="assets/icons/icon-shield.svg" alt=""><span>[Certification /<br>status placeholder]</span></div>
+      <div class="proof-item"><img src="assets/icons/icon-link.svg" alt=""><span>Compatible with<br>Stryker laparoscopes</span></div>
+      <div class="proof-item"><img src="assets/icons/icon-rotate.svg" alt=""><span>One-handed<br>scope rotation</span></div>
+      <div class="proof-item"><img src="assets/icons/icon-hand.svg" alt=""><span>Designed around<br>surgeon ergonomics</span></div>
     </div>
   </div>
   <div class="lr-model reveal" tabindex="0" role="img" aria-label="3D model of the LapRotator on a laparoscope, turning around the scope. Hover or focus to stop it; drag or use the left and right arrow keys to turn it.">
@@ -408,9 +408,9 @@ STORIES = [
     ("Award", "2nd Place, USC Viterbi Min Family Challenge", "April 27, 2026",
      "The Min Family Challenge (MFC) is USC Viterbi’s flagship student venture competition, part of tiehub’s annual $150K Awards Night, awarding funding to student-founded startups with the strongest potential for real-world impact. At the 2026 MEPC &amp; MFC Awards Night on April 27, our team placed 2nd overall and was also selected by audience vote as one of three finalists to deliver a live three-minute pitch, which we won, bringing a working prototype of the LapRotator to the stage."),
     ("Funding", "Closed $60K Pre-Seed Round", "[Date]",
-     "We closed a $60,000 pre-seed round to fund our utility patent filing and kick off the FDA regulatory process, including the testing needed to support that submission. Thank you to everyone who believed in what we’re building this early on."),
-    ("Patent", "Filing Our Utility Patent", "[Date]",
-     "We’re working with patent counsel to file a utility patent protecting the core LapRotator mechanism, covering the one-handed rotation drive and control interface. The application is in preparation now, and we expect to submit it soon."),
+     "We closed a $60,000 pre-seed round to fund our patent filing and kick off the FDA regulatory process, including the testing needed to support that submission. Thank you to everyone who believed in what we’re building this early on."),
+    ("Patent", "Patent Filed Through the PCT", "[Date]",
+     "Pando Surgical has officially filed a patent application for the LapRotator through the international Patent Cooperation Treaty (PCT). The LapRotator is an attachment for laparoscopes that lets surgeons rotate the scope with one hand. It works with standard laparoscope equipment and is compact, lightweight, and intuitive, built for better control, less fatigue, and better ergonomics. This filing is a big milestone for our team. Thank you to everyone who has supported us along the way. More to come soon."),
 ]
 AVATAR = '<span class="avatar"><img src="assets/icons/avatar-mark.svg" alt=""></span>'
 cards = []
