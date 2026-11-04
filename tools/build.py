@@ -112,10 +112,10 @@ FOOTER = f"""<footer class="footer">
     </div>
     <div class="footer-right">
       <nav class="footer-legal" aria-label="Legal">
+        <button type="button" data-modal="login">Team Log in</button>
         <a href="privacy.html">Privacy Notice</a>
         <a href="terms.html">Terms of Use</a>
         <a href="accessibility.html">Accessibility Statement</a>
-        <button type="button" data-modal="login">Team log in</button>
       </nav>
       <small>© 2026 Pando Surgical, Inc. All rights reserved.</small>
     </div>
@@ -153,10 +153,10 @@ FOOTER_SIMPLE = f"""<footer class="footer-simple">
   <div class="fs-bottom">
     <small>© 2026 Pando Surgical, Inc. All rights reserved.</small>
     <nav class="fs-legal" aria-label="Legal">
+      <button type="button" data-modal="login">Team Log in</button>
       <a href="privacy.html">Privacy Notice</a>
       <a href="terms.html">Terms of Use</a>
       <a href="accessibility.html">Accessibility Statement</a>
-      <button type="button" data-modal="login">Team log in</button>
     </nav>
   </div>
 </footer>"""
@@ -392,8 +392,8 @@ page("ent.html", "ENT Product", "Pando Surgical is developing a new ergonomic so
 # ---------------------------------------------------------------- Team
 FOUNDERS = [
     ("Aiden Pan", "CEO & Co-Founder", "USC Biomedical Engineering", "https://www.linkedin.com/in/aidenpan/"),
-    ("Toshi Nagai", "Co-Founder", "USC Biomedical Engineering and Mechanical Engineering", "https://www.linkedin.com/in/toshio-nagai2029/"),
     ("Derek Hua", "Co-Founder and Head of Clinical Development", "USC Biomedical Engineering and Pre-Medicine", "https://www.linkedin.com/in/derekhuausc/"),
+    ("Toshi Nagai", "Co-Founder", "USC Biomedical Engineering and Mechanical Engineering", "https://www.linkedin.com/in/toshio-nagai2029/"),
     ("Sean Lee", "Manager of Strategic Partners", "Cornell University Biomedical Engineering", "https://www.linkedin.com/in/sean-lee-9bbab8373/"),
 ]
 ADVISORS = [
@@ -430,39 +430,45 @@ page("team.html", "Our Team", "Meet the engineers and advisors behind Pando Surg
 """, light=True)
 
 # ---------------------------------------------------------------- News
+# News stories from Figma (Ver1 is the source). Date shows in the story pop-up only; None hides it.
+# Text is one paragraph or a list of paragraphs.
 STORIES = [
-    ("Accelerator", "Accepted into USC and Techstars University Catalyst Pre-Accelerator", "August 2026",
+    ("Accepted into USC and Techstars University Catalyst Pre-Accelerator", "August 2026",
      "Pando Surgical has officially been accepted into the USC and Techstars University Catalyst Pre-Accelerator, a high-impact program delivered in partnership with the USC Research and Innovation office. The program officially launched in late August in Los Angeles, bringing together the Pando Surgical leadership team, program directors, and a select cohort of fellow founders for collaborative kickoff sessions. Over the coming weeks, the company will engage in intensive mentorship and strategic development to accelerate its commercialization pathway alongside top-tier, research-backed ventures."),
-    ("Award", "2nd Place, USC Viterbi Min Family Challenge", "April 27, 2026",
+    ("2nd Place, USC Viterbi Min Family Challenge", "April 27, 2026",
      "The Min Family Challenge (MFC) is USC Viterbi’s flagship student venture competition, part of tiehub’s annual $150K Awards Night, awarding funding to student-founded startups with the strongest potential for real-world impact. At the 2026 MEPC &amp; MFC Awards Night on April 27, our team placed 2nd overall and was also selected by audience vote as one of three finalists to deliver a live three-minute pitch, which we won, bringing a working prototype of the LapRotator to the stage."),
-    ("Funding", "Closed $60K Pre-Seed Round", "[Date]",
-     "We closed a $60,000 pre-seed round to fund our patent filing and kick off the FDA regulatory process, including the testing needed to support that submission. Thank you to everyone who believed in what we’re building this early on."),
-    ("Patent", "Patent Filed Through the PCT", "[Date]",
-     "Pando Surgical has officially filed a patent application for the LapRotator through the international Patent Cooperation Treaty (PCT). The LapRotator is an attachment for laparoscopes that lets surgeons rotate the scope with one hand. It works with standard laparoscope equipment and is compact, lightweight, and intuitive, built for better control, less fatigue, and better ergonomics. This filing is a big milestone for our team. Thank you to everyone who has supported us along the way. More to come soon."),
+    ("Closed $60K Pre-Seed Round", None,
+     "We closed a $60,000 pre-seed round to fund our utility patent filing and kick off the FDA regulatory process, including the testing needed to support that submission. Thank you to everyone who believed in what we’re building this early on."),
+    ("Submitted the Utility Patent Application Through PCT", None, [
+     "We’re proud to announce that Pando Surgical has officially filed a patent for the LapRotator through the international Patent Cooperation Treaty.",
+     "The LapRotator is an attachment for laparoscopes that lets surgeons rotate the scope with one hand. It works with standard laparoscope equipment, and it's compact, lightweight, and intuitive. The goal is better control, less fatigue, and better ergonomics for the surgeons doing the work.",
+     "It's a big milestone for our team, and it's good to finally claim IP for the product we’ve been building.",
+     "Thank you to everyone who has supported us along the way. More to come soon."]),
 ]
 AVATAR = '<span class="avatar"><img src="assets/icons/avatar-mark.svg" alt=""></span>'
 cards = []
 modals = []
-for i, (cat, title, date, text) in enumerate(STORIES, 1):
+for i, (title, date, text) in enumerate(STORIES, 1):
+    paras = [text] if isinstance(text, str) else text
+    when = f"<time>{date}</time>" if date else ""
     cards.append(f"""<button class="card reveal" data-modal="story-{i}" aria-haspopup="dialog">
       <span class="img-wrap"><img src="assets/img/news-{i}.jpg" alt="" loading="lazy"></span>
       <div class="card-text">
-        <span class="cat">{cat}</span>
         <h3>{title}</h3>
-        <span class="author">{AVATAR}<span><b>Pando Surgical Team</b><time>{date}</time></span></span>
-        <span class="excerpt">{text}</span>
+        <span class="author">{AVATAR}<span><b>Pando Surgical Team</b></span></span>
+        <span class="excerpt">{" ".join(paras)}</span>
         <span class="read-more">Read more →</span>
       </div>
     </button>""")
+    body = "\n      ".join(f'<p class="body">{t}</p>' for t in paras)
     modals.append(f"""<div class="modal" id="story-{i}" role="dialog" aria-modal="true" aria-labelledby="story-{i}-title" aria-hidden="true">
   <article class="modal-card story-card">
     <img src="assets/img/news-{i}.jpg" alt="">
     <button class="modal-close" aria-label="Close"><img src="assets/icons/story-close.svg" alt=""></button>
     <div class="story-body">
-      <span class="cat">{cat}</span>
       <h2 id="story-{i}-title">{title}</h2>
-      <span class="author story-author">{AVATAR}<span><b>Pando Surgical Team</b><time>{date}</time></span></span>
-      <p class="body">{text}</p>
+      <span class="author story-author">{AVATAR}<span><b>Pando Surgical Team</b>{when}</span></span>
+      {body}
     </div>
   </article>
 </div>""")

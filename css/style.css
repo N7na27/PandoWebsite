@@ -494,7 +494,6 @@ p { font-weight: 400; }
 .card .img-wrap { display: block; overflow: hidden; border-radius: 5px; }
 .card .img-wrap img { display: block; width: 100%; height: 320px; object-fit: cover; border-radius: 5px; }
 .card-text { padding: 4px 4px 0; display: flex; flex-direction: column; gap: 10px; }
-.cat { font-size: 14px; font-weight: 500; color: var(--gold); }
 .card h3 { font-size: 24px; line-height: 1.25; }
 .author { display: flex; align-items: center; gap: 12px; }
 .avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; flex: none; }
@@ -530,11 +529,11 @@ p { font-weight: 400; }
 .story-card > img { width: 100%; height: clamp(140px, 30vh, 300px); object-fit: cover; flex: none; }
 .story-body { overflow-y: auto; }
 .story-body { padding: 36px 48px 44px; display: flex; flex-direction: column; gap: 14px; }
-.story-body .cat { font-size: 15px; }
 .story-body h2 { font-size: 36px; line-height: 1.18; }
 .story-author { gap: 14px; padding: 4px 0 8px; }
 .story-author time { font-size: 15px; color: rgba(46, 49, 53, 0.55); }
 .story-body p.body { font-size: 18px; line-height: 1.65; color: rgba(46, 49, 53, 0.8); }
+.story-body p.body + p.body { margin-top: 16px; } /* 14px gap + 16px = one blank line, as in Figma */
 
 .login-card { max-width: 560px; box-shadow: 0 24px 30px rgba(0, 0, 0, 0.25); }
 .login-head { background: var(--dark); color: var(--on-dark); padding: 40px 0 36px; text-align: center; display: flex; flex-direction: column; gap: 8px; }
