@@ -2,13 +2,13 @@
    Default: turns around the scope's axis. Hover (or keyboard focus, or a tap on touch screens): eases to a stop at that angle.
    Drag (or the arrow keys when focused) turns it around the scope by hand; it glides on after a flick.
    Posed like the product render: scope running off to the lower left, camera body up front on the right.
-   Shown with its own materials from the model file (white plastic with a light coat, colored keys,
-   stainless scope, metal buttons), lit by a soft studio room so the gloss and metal read like the renders.
-   The model (assets/model/laprotator.glb) is exported from "LapRotator render (revB).blend" by tools/model.py.
-   Until it loads, or if WebGL is missing, the poster image shows. */
+   Looks like the Blender (Cycles) renders: the model file (assets/model/laprotator.glb, exported from
+   "LapRotator render (revB).blend" by tools/model.py) brings its materials, Cycles ambient occlusion
+   baked per vertex, and the scene's studio: the five area lights, placed as the render camera sees them,
+   the near-black world, and AgX "Medium High Contrast". The lights stay fixed to this camera while the
+   model turns, like a turntable. Until it loads, or if WebGL is missing, the poster image shows. */
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
 
 const box = document.querySelector(".lr-model");
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -24,9 +24,13 @@ const BUTTONS_TOWARD = new THREE.Vector3(0, 1, 0.5);
 const BODY_END_Z = 0.07;
 // Radius (meters) of the surface that follows the pointer while dragging, about the housing's
 const GRIP_RADIUS = 0.025;
+// Blender area-light radiance (power per area) to three.js units, matched against the Cycles hero render
+const LIGHT_SCALE = 0.26;
+// Blender AgX looks: contrast in AgX log space around 0.4 (OCIO GradingPrimary, log style, pivot -0.2)
+const AGX_LOOKS = { "AgX - Base Contrast": 1, "AgX - Medium High Contrast": 1.2 };
 
 if (box) {
-  // Load only when the section comes close, so the 1.5 MB model never slows the first paint
+  // Load only when the section comes close, so the 1.7 MB model never slows the first paint
   const near = new IntersectionObserver((entries) => {
     if (entries.some((e) => e.isIntersecting)) { near.disconnect(); start().catch(() => {}); }
   }, { rootMargin: "400px 0px" });
@@ -36,24 +40,25 @@ if (box) {
 async function start() {
   const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 0.9;
-
-  // Studio light: a soft room for reflections (the metal needs something to mirror),
-  // plus one key light from the upper left so the shape reads
-  const scene = new THREE.Scene();
-  const pmrem = new THREE.PMREMGenerator(renderer);
-  scene.environment = pmrem.fromScene(new RoomEnvironment(renderer), 0.04).texture;
-  pmrem.dispose();
-  const key = new THREE.DirectionalLight(0xffffff, 1.0);
-  key.position.set(-1, 2, 3);
-  scene.add(key);
-
   const camera = new THREE.PerspectiveCamera(24, 1, 0.1, 50);
 
   const gltf = await new GLTFLoader().loadAsync("assets/model/laprotator.glb");
   const model = gltf.scene;
-  model.traverse((o) => { if (o.isMesh) o.material.envMapIntensity = 0.7; }); // softer reflections than the full room
+  const studio = model.userData.studio;
+
+  // Color management as in Blender: AgX, with the look's contrast, and the scene exposure
+  agxLook(AGX_LOOKS[studio.look] ?? 1);
+  renderer.toneMapping = THREE.AgXToneMapping;
+  renderer.toneMappingExposure = 2 ** (studio.exposure || 0);
+
+  // Light: the world plus the area lights as glowing panels, all reaching the model as image-based
+  // light, so it gets the same soft highlights and reflections. This camera never turns, so the
+  // render camera's view of the lights maps straight onto it.
+  const scene = new THREE.Scene();
+  const pmrem = new THREE.PMREMGenerator(renderer);
+  scene.environment = pmrem.fromScene(studioScene(studio), 0, 0.1, 100).texture;
+  pmrem.dispose();
+  model.traverse((o) => { if (o.isMesh && o.geometry.attributes._ao) bakedOcclusion(o.material); });
 
   // Center along the scope, keep the scope's axis (x = 0, y = 0) as the spin axis
   const bounds = new THREE.Box3().setFromObject(model);
@@ -239,4 +244,49 @@ async function start() {
   fit();
   box.classList.add("is-live");
   loop();
+}
+
+// The Blender studio as a scene for the environment map: the world color all around, each area
+// light a panel of its size and radiance, placed where the render camera sees it
+function studioScene(studio) {
+  const env = new THREE.Scene();
+  env.background = new THREE.Color().setRGB(...studio.world);
+  for (const L of studio.lights) {
+    const color = new THREE.Color().setRGB(...L.color).multiplyScalar(L.radiance * LIGHT_SCALE);
+    const panel = new THREE.Mesh(new THREE.PlaneGeometry(L.size[0], L.size[1]), new THREE.MeshBasicMaterial({ color, side: THREE.DoubleSide }));
+    const a = L.axes;
+    panel.matrixAutoUpdate = false;
+    panel.matrix.set(a[0][0], a[0][1], a[0][2], L.position[0], a[1][0], a[1][1], a[1][2], L.position[1], a[2][0], a[2][1], a[2][2], L.position[2], 0, 0, 0, 1);
+    env.add(panel);
+  }
+  return env;
+}
+
+// Blender's AgX looks grade in AgX log space, just before the AgX curve; three.js has the same spot
+function agxLook(contrast) {
+  if (contrast === 1) return;
+  const chunk = THREE.ShaderChunk.tonemapping_pars_fragment;
+  const at = "color = agxDefaultContrastApprox( color );";
+  if (chunk.includes("/* agx look */") || !chunk.includes(at)) return;
+  THREE.ShaderChunk.tonemapping_pars_fragment = chunk.replace(at, `/* agx look */ color = ( color - 0.4 ) * ${contrast.toFixed(3)} + 0.4;\n\t${at}`);
+}
+
+// Cycles ambient occlusion baked into each vertex (attribute _AO) darkens the studio light and its
+// reflections in creases and between parts, as three.js does with an AO map
+function bakedOcclusion(material) {
+  material.onBeforeCompile = (shader) => {
+    shader.vertexShader = "attribute vec4 _ao;\nvarying float vBakedAO;\n" +
+      shader.vertexShader.replace("#include <begin_vertex>", "#include <begin_vertex>\n\tvBakedAO = _ao.x;");
+    shader.fragmentShader = "varying float vBakedAO;\n" + shader.fragmentShader.replace("#include <aomap_fragment>", `
+	float ambientOcclusion = vBakedAO;
+	reflectedLight.indirectDiffuse *= ambientOcclusion;
+	#if defined( USE_CLEARCOAT )
+		clearcoatSpecularIndirect *= ambientOcclusion;
+	#endif
+	#if defined( USE_ENVMAP ) && defined( STANDARD )
+		float dotNV = saturate( dot( geometryNormal, geometryViewDir ) );
+		reflectedLight.indirectSpecular *= computeSpecularOcclusion( dotNV, ambientOcclusion, material.roughness );
+	#endif`);
+  };
+  material.customProgramCacheKey = () => "baked-ao";
 }

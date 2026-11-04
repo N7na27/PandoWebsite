@@ -59,4 +59,4 @@ Live at https://n7na27.github.io/PandoWebsite/ (GitHub Pages, deploys from `main
 - **Not connected yet:**
   - The contact, careers and log in forms are front end only.
   - Placeholders (stat source, some news dates) stay as they are until real content arrives.
-- **3D model:** `assets/model/laprotator.glb` comes from "LapRotator render (revB).blend" via `tools/model.py` (run it with Blender 5.2, see the script). The poster image is a capture of the first frame at 1512px.
+- **3D model:** `assets/model/laprotator.glb` comes from "LapRotator render (revB).blend" via `tools/model.py` (run it with Blender 5.2, see the script). The poster image is a capture of the first frame at 1512px. It is lit like the Cycles renders: the export carries the .blend's area lights, world and AgX look, plus baked ambient occlusion; `LIGHT_SCALE` in `js/model.js` was matched against `LapRotator_revB_hero.png`.
