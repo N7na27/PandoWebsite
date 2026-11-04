@@ -11,6 +11,7 @@ Live at https://n7na27.github.io/PandoWebsite/ (GitHub Pages, deploys from `main
   - Two themes are CSS variables at the top: **cold** (default, Figma "Website (Ver2-Cold)") and **warm** (cream, Figma "Website (Ver1)"). Any color that differs per theme goes in a variable, not a hard-coded value.
 - `js/main.js` holds all behavior: nav, theme toggle, reveal on scroll, tabs, modals, forms. Edit it directly.
 - `assets/img`, `assets/icons`, `assets/video` hold the media.
+- `vercel.json` tells Vercel (NACE-startup/pandosurgical, branch `new`) to serve the files as a static site. Their Vercel project is set to Next.js, so without it the build fails.
 
 ## Design source of truth: Figma
 
