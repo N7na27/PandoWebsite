@@ -431,11 +431,21 @@ p { font-weight: 400; }
 .compare video { display: block; width: 100%; height: 380px; object-fit: cover; border-radius: 5px; background: #111; }
 .compare figcaption { font-size: 28px; font-weight: 500; color: rgba(46, 49, 53, 0.55); }
 .compare figure:last-child figcaption { color: var(--accent); }
-/* Features and Advantages: two columns of 620px checklist items (Figma "Feature list") */
-.features { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 620px)); row-gap: 28px; }
+/* Features and Advantages: checklist on the left, render slideshow on the right (Figma "LapRotator Tabs").
+   Feature rows reach into the gap like the 620px Figma rows, so the longest one stays on one line at 1512px. */
+.features-layout { display: grid; grid-template-columns: 1fr 1fr; column-gap: 65px; }
+.features { list-style: none; margin: 0 -24px 0 0; padding: 0; display: flex; flex-direction: column; gap: 32px; }
 .features li { display: flex; align-items: center; gap: 16px; font-size: 20px; line-height: 1.45; color: rgba(var(--text-rgb), 0.8); }
 .check { flex: none; width: 40px; height: 40px; border-radius: 50%; background: var(--dark); display: flex; align-items: center; justify-content: center; }
 .check img { display: block; }
+/* Render slideshow (Figma "LapRotator Render Slideshow"): each image shows ~4 s, then dissolves into the next.
+   It takes the height of the feature list beside it. */
+.lr-slides { position: relative; min-height: 0; border-radius: 5px; overflow: hidden; background: #111; }
+.lr-slides img {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+  opacity: 0; transition: opacity 800ms ease-in-out;
+}
+.lr-slides img.is-on { opacity: 1; }
 /* Specifications: compatibility table (Figma "Spec table") */
 .spec-head { font-size: 24px; font-weight: 500; color: var(--accent); margin-bottom: 32px; }
 .spec-intro { font-size: 18px; font-weight: 400; color: rgba(var(--text-rgb), 0.7); margin-bottom: 32px; }
@@ -721,6 +731,10 @@ input::placeholder, textarea::placeholder { color: rgba(46, 49, 53, 0.4); }
 }
 
 @media (max-width: 1100px) {
+  /* Features stack above the slideshow, which keeps the Figma 604:328 shape */
+  .features-layout { grid-template-columns: 1fr; row-gap: 40px; }
+  .features { margin-right: 0; }
+  .lr-slides { aspect-ratio: 604 / 328; }
   .nav-left { gap: 32px; }
   .nav-links { gap: 24px; }
   .nav-right { gap: 16px; }
@@ -806,7 +820,7 @@ input::placeholder, textarea::placeholder { color: rgba(46, 49, 53, 0.4); }
   .compare video { height: 240px; }
   .compare figcaption { font-size: 22px; }
   .tab-panel h3 { font-size: 28px; }
-  .features { grid-template-columns: 1fr; row-gap: 20px; }
+  .features { gap: 20px; }
   .features li { font-size: 17px; }
   .spec-head { font-size: 22px; margin-bottom: 20px; }
   .spec-intro { font-size: 16px; margin-bottom: 24px; }

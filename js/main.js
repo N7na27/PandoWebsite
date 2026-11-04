@@ -204,6 +204,30 @@
     });
   });
 
+  /* ---------- LapRotator render slideshow ----------
+     Each render shows ~4 s, then the CSS fades it into the next (Figma "LapRotator Render Slideshow").
+     Runs only while on screen and the page is visible; with reduced motion it stays on the first image. */
+  document.querySelectorAll(".lr-slides").forEach(function (box) {
+    var slides = box.querySelectorAll("img");
+    if (slides.length < 2 || reduceMotion || !("IntersectionObserver" in window)) return;
+    var i = 0, timer = 0, onScreen = false;
+    function next() {
+      slides[i].classList.remove("is-on");
+      i = (i + 1) % slides.length;
+      slides[i].classList.add("is-on");
+    }
+    function sync() {
+      var run = onScreen && !document.hidden;
+      if (run && !timer) timer = setInterval(next, 4800);
+      if (!run && timer) { clearInterval(timer); timer = 0; }
+    }
+    new IntersectionObserver(function (entries) {
+      onScreen = entries[entries.length - 1].isIntersecting;
+      sync();
+    }).observe(box);
+    document.addEventListener("visibilitychange", sync);
+  });
+
   /* ---------- Modals (Log in, news stories) ---------- */
   var lastFocus = null;
   function openModal(id) {

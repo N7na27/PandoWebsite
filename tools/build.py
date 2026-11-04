@@ -322,7 +322,20 @@ SPECS = [
     ("Pediatric", "502-543-010/030 (2.7 mm); 502-290-010/030 (2.9 mm, IDEAL EYES™)"),
     ("Camera coupler", "Stryker 1488 HD Camera Head Coupler, 18 mm (P/N 1488-020-122)"),
 ]
-FEATURE_ITEMS = "\n".join(f'      <li><span class="check"><img src="assets/icons/icon-check.svg" alt="" width="16" height="16"></span>{f}</li>' for f in FEATURES)
+FEATURE_ITEMS = "\n".join(f'        <li><span class="check"><img src="assets/icons/icon-check.svg" alt="" width="16" height="16"></span>{f}</li>' for f in FEATURES)
+# Figma "LapRotator Render Slideshow": revB renders that swap automatically (js/main.js), cropped to 604x328
+RENDERS = [
+    "LapRotator on a laparoscope, three-quarter view with the camera buttons on top",
+    "LapRotator from the front, showing the drum and the yellow and red rotation keys",
+    "LapRotator from above, showing the three camera buttons",
+    "LapRotator in side profile, with the rotation keys and the Pando logo",
+    "LapRotator from below, looking up at the rotation keys",
+    "LapRotator from the rear, showing the camera handle",
+]
+ON = ' class="is-on"'  # the first render shows before the script runs
+RENDER_SLIDES = "\n".join(
+    f'        <img src="assets/img/laprotator-render-{i}.webp" alt="{alt}" width="1208" height="656" loading="lazy"{ON if i == 1 else ""}>'
+    for i, alt in enumerate(RENDERS, 1))
 # Keep each part number on one line, so phones never break it at a hyphen
 def _pn(text):
     return re.sub(r"\d+(?:-\d+)+(?:/\d+)*", lambda m: f'<span class="pn">{m.group(0)}</span>', text)
@@ -362,9 +375,14 @@ page("laprotator.html", "LapRotator", "LapRotator: an attachment for laparoscope
   </div>
   <div class="tab-panel" role="tabpanel" id="panel-feat" aria-labelledby="tab-feat" hidden>
     <h3>Features and Advantages</h3>
-    <ul class="features">
+    <div class="features-layout">
+      <ul class="features">
 {FEATURE_ITEMS}
-    </ul>
+      </ul>
+      <div class="lr-slides" role="group" aria-label="LapRotator renders, changing every few seconds">
+{RENDER_SLIDES}
+      </div>
+    </div>
   </div>
   <div class="tab-panel" role="tabpanel" id="panel-spec" aria-labelledby="tab-spec" hidden>
     <h3>Specifications</h3>
