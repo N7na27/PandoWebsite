@@ -302,7 +302,6 @@ page("index.html", "Home", "Pando Surgical makes ergonomic surgical tools that a
   <p>Surgeon, hospital or partner? We’d love to hear from you.</p>
   <div class="btn-row">
     {btn("Get in touch", "contact.html")}
-    {btn("Press inquiries", f"mailto:{EMAIL}?subject=Press%20inquiry", "outline")}
   </div>
 </section>
 """, extra=MODEL_SCRIPTS)
