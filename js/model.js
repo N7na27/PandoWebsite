@@ -30,7 +30,7 @@ const LIGHT_SCALE = 0.26;
 const AGX_LOOKS = { "AgX - Base Contrast": 1, "AgX - Medium High Contrast": 1.2 };
 
 if (box) {
-  // Load only when the section comes close, so the 2 MB model never slows the first paint
+  // Load only when the section comes close, so the 1.7 MB model never slows the first paint
   const near = new IntersectionObserver((entries) => {
     if (entries.some((e) => e.isIntersecting)) { near.disconnect(); start().catch(() => {}); }
   }, { rootMargin: "400px 0px" });
