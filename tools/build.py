@@ -398,6 +398,7 @@ FOUNDERS = [
 ]
 ADVISORS = [
     ("Noah Pearson", "Advisor", "PhD Mechanical Engineering", "https://www.linkedin.com/in/noah-r-pearson/"),
+    ("Arieh Halpern", "Advisor", "Medical Device and Digital Health Executive", None),
     ("Xiaoyang Hua", "Advisor", "MD, PhD, FACS, Otolaryngology (ENT) Surgeon", None),
 ]
 
