@@ -8,8 +8,8 @@ The .blend (revB) holds one object per part (Drum_Body, Handle, Shaft_Luer, the 
 each with its own render material. Every material goes to the website as it is in Blender
 (Principled base color, metallic, roughness, coat), so change a material there and the site follows.
 Modifiers (Smooth by Angle, bevels) are applied. Lights, cameras and hidden objects are left out.
-Positions are stored as 16-bit and normals as 8-bit (glTF KHR_mesh_quantization), which keeps the
-file small with no visible loss.
+Positions and normals are stored as 16-bit (glTF KHR_mesh_quantization), which keeps the file small.
+(8-bit normals showed as streaks on the glossy plastic under the studio lights.)
 
 Each vertex also carries Cycles ambient occlusion, baked here (attribute "_AO", 0 = fully hidden).
 js/model.js darkens the soft studio light with it, the way Cycles' shadows darken the render, so
@@ -42,6 +42,10 @@ BUTTONS = "LR_ButtonMetal"  # the camera's three buttons, which should face -Y i
 # Ambient occlusion bake: how far (Blender units, about 30 mm) a surface looks for nearby parts, and samples
 AO_DISTANCE = 1.0
 AO_SAMPLES = 256
+# The CAD tessellation has long thin triangles (around the "Pando" lettering especially). Plain smooth
+# normals average them unevenly, which shows as streaks on the glossy plastic. Blender's Weighted Normal
+# modifier (by face area, keeping sharp edges) evens that out. Applied to the exported copies only.
+WEIGHTED_NORMALS = True
 
 
 def gltf_material(mat):
@@ -121,6 +125,11 @@ def bake_ao(objs, depsgraph):
         c.matrix_world = o.matrix_world
         coll.objects.link(c)
         me.color_attributes.active_color = me.color_attributes.new("AO", "FLOAT_COLOR", "POINT")
+        if WEIGHTED_NORMALS:
+            wn = c.modifiers.new("Weighted Normal", "WEIGHTED_NORMAL")
+            wn.mode = "FACE_AREA"
+            wn.weight = 50
+            wn.keep_sharp = True
         copies.append(c)
     for o in objs:  # only the copies may block the bake rays
         o.hide_render = True
@@ -246,12 +255,12 @@ def main():
                 keep, local = np.unique(sub.reshape(-1), return_inverse=True)
                 q = np.round((pos[keep] - center) / half * 32767).astype(np.int16)
                 q4 = np.zeros((len(q), 4), np.int16); q4[:, :3] = q
-                n4 = np.zeros((len(q), 4), np.int8); n4[:, :3] = np.round(nrm[keep] * 127).astype(np.int8)
+                n4 = np.zeros((len(q), 4), np.int16); n4[:, :3] = np.round(nrm[keep] * 32767).astype(np.int16)
                 pv = add_view(q4.tobytes(), 8, 34962)
                 accessors.append({"bufferView": pv, "componentType": 5122, "normalized": True, "count": len(q),
                                   "type": "VEC3", "min": q.min(0).tolist(), "max": q.max(0).tolist()})
-                nv = add_view(n4.tobytes(), 4, 34962)
-                accessors.append({"bufferView": nv, "componentType": 5120, "normalized": True, "count": len(q), "type": "VEC3"})
+                nv = add_view(n4.tobytes(), 8, 34962)
+                accessors.append({"bufferView": nv, "componentType": 5122, "normalized": True, "count": len(q), "type": "VEC3"})
                 o4 = np.zeros((len(q), 4), np.uint8); o4[:, 0] = np.round(np.clip(occ[keep], 0, 1) * 255).astype(np.uint8)
                 ov = add_view(o4.tobytes(), 4, 34962)
                 accessors.append({"bufferView": ov, "componentType": 5121, "normalized": True, "count": len(q), "type": "VEC4"})
