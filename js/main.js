@@ -205,20 +205,34 @@
   });
 
   /* ---------- LapRotator render slideshow ----------
-     Each render shows ~4 s, then the CSS fades it into the next (Figma "LapRotator Render Slideshow").
+     Each render shows 2.5 s, then the track slides left to the next in 600ms (Figma "LapRotator Render Slideshow").
+     A copy of the first render at the end lets it loop without sliding back across all of them.
      Runs only while on screen and the page is visible; with reduced motion it stays on the first image. */
   document.querySelectorAll(".lr-slides").forEach(function (box) {
-    var slides = box.querySelectorAll("img");
-    if (slides.length < 2 || reduceMotion || !("IntersectionObserver" in window)) return;
+    var track = box.querySelector(".lr-slides-track");
+    var count = track ? track.children.length : 0;
+    if (count < 2 || reduceMotion || !("IntersectionObserver" in window)) return;
+    var copy = track.children[0].cloneNode();
+    copy.alt = ""; copy.setAttribute("aria-hidden", "true");
+    track.appendChild(copy);
     var i = 0, timer = 0, onScreen = false;
+    function show(n, animate) {
+      track.classList.toggle("no-anim", !animate);
+      track.style.transform = "translateX(" + (-100 * n) + "%)";
+    }
+    function rewind() { // on the copy: jump back to the real first render, which looks the same
+      if (i < count) return;
+      i = 0; show(0, false);
+      void track.offsetWidth;
+    }
+    track.addEventListener("transitionend", rewind);
     function next() {
-      slides[i].classList.remove("is-on");
-      i = (i + 1) % slides.length;
-      slides[i].classList.add("is-on");
+      rewind();
+      i += 1; show(i, true);
     }
     function sync() {
       var run = onScreen && !document.hidden;
-      if (run && !timer) timer = setInterval(next, 4800);
+      if (run && !timer) timer = setInterval(next, 3100);
       if (!run && timer) { clearInterval(timer); timer = 0; }
     }
     new IntersectionObserver(function (entries) {

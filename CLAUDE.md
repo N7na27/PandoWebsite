@@ -29,7 +29,7 @@ Live at https://n7na27.github.io/PandoWebsite/ (GitHub Pages, deploys from `main
 - **Motion:**
   - Reveal on scroll: add class `reveal` (fades up 16px, 600ms). Images use the same entrance as the text beside them.
   - Soft easing: `var(--ease-soft)`.
-  - Auto-swapping images: `.lr-slides` (LapRotator Features tab) fades to the next image every 4.8 s while on screen. Figma "LapRotator Render Slideshow" shows the same with After delay variants.
+  - Auto-swiping images: `.lr-slides` (LapRotator Features tab) slides left to the next image every 3.1 s (2.5 s hold, 600ms slide) while on screen. Figma "LapRotator Render Slideshow" does the same with a filmstrip in each variant and Smart Animate.
   - Respect `prefers-reduced-motion`. The global rule in `style.css` covers CSS. Pause autoplaying video in JS.
 - **Hover states:**
   - Team cards rise 6px and show a soft shadow. No border, no photo zoom.

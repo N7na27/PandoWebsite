@@ -323,18 +323,16 @@ SPECS = [
     ("Camera coupler", "Stryker 1488 HD Camera Head Coupler, 18 mm (P/N 1488-020-122)"),
 ]
 FEATURE_ITEMS = "\n".join(f'        <li><span class="check"><img src="assets/icons/icon-check.svg" alt="" width="16" height="16"></span>{f}</li>' for f in FEATURES)
-# Figma "LapRotator Render Slideshow": revB renders that swap automatically (js/main.js), cropped to 604x328
-RENDERS = [
+# Figma "LapRotator Render Slideshow": revB renders that swap automatically (js/main.js), cropped like its variants
+RENDERS = [  # Figma variants: Default, Profile, Top, Low, 3/4
     "LapRotator on a laparoscope, three-quarter view with the camera buttons on top",
-    "LapRotator from the front, showing the drum and the yellow and red rotation keys",
-    "LapRotator from above, showing the three camera buttons",
     "LapRotator in side profile, with the rotation keys and the Pando logo",
+    "LapRotator from above, showing the three camera buttons",
     "LapRotator from below, looking up at the rotation keys",
     "LapRotator from the rear, showing the camera handle",
 ]
-ON = ' class="is-on"'  # the first render shows before the script runs
 RENDER_SLIDES = "\n".join(
-    f'        <img src="assets/img/laprotator-render-{i}.webp" alt="{alt}" width="1208" height="656" loading="lazy"{ON if i == 1 else ""}>'
+    f'          <img src="assets/img/laprotator-render-{i}.webp" alt="{alt}" width="1208" height="656" decoding="async">'
     for i, alt in enumerate(RENDERS, 1))
 # Keep each part number on one line, so phones never break it at a hyphen
 def _pn(text):
@@ -342,7 +340,7 @@ def _pn(text):
 SPEC_ROWS = "\n".join(f'      <div class="spec-row"><dt>{k}</dt><dd>{_pn(v)}</dd></div>' for k, v in SPECS)
 page("laprotator.html", "LapRotator", "LapRotator: an attachment for laparoscopes that gives surgeons intuitive, single-handed scope rotation.", "laprotator", f"""
 <section class="lr-hero">
-  <div class="lr-art"><div class="lr-float"><img src="assets/img/laprotator-device.webp" alt="LapRotator attached to a laparoscope" width="1889" height="832"></div></div>
+  <div class="lr-art"><div class="lr-float"><img src="assets/img/laprotator-hero-render.webp" alt="LapRotator attached to a laparoscope" width="1920" height="856"></div></div>
   <div class="lr-hero-text">
     <h1>LapRotator</h1>
     <p>One-Handed Laparoscope Rotation: an attachment for laparoscopes that gives surgeons intuitive, single-handed control.</p>
@@ -380,7 +378,9 @@ page("laprotator.html", "LapRotator", "LapRotator: an attachment for laparoscope
 {FEATURE_ITEMS}
       </ul>
       <div class="lr-slides" role="group" aria-label="LapRotator renders, changing every few seconds">
+        <div class="lr-slides-track">
 {RENDER_SLIDES}
+        </div>
       </div>
     </div>
   </div>
