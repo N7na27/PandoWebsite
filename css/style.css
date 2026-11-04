@@ -194,8 +194,9 @@ p { font-weight: 400; }
 .fs-bottom { display: flex; justify-content: space-between; align-items: center; gap: 24px 40px; padding-top: 32px; border-top: 1px solid rgba(var(--on-dark-rgb), 0.2); flex-wrap: wrap; }
 .fs-bottom small { font-size: 16px; opacity: 0.7; }
 .fs-legal { display: flex; gap: 40px; flex-wrap: wrap; font-size: 16px; }
-.fs-legal a { opacity: 0.85; transition: opacity 150ms ease-out; }
-.fs-legal a:hover { opacity: 1; }
+.fs-legal a, .fs-legal button { opacity: 0.85; transition: opacity 150ms ease-out; }
+.fs-legal a:hover, .fs-legal button:hover, .fs-legal button:focus-visible { opacity: 1; }
+.fs-legal button { background: none; border: 0; padding: 0; font: inherit; color: inherit; cursor: pointer; }
 
 /* ---------- Footer (gradient version with the Pando wordmark) ---------- */
 .footer {
@@ -242,8 +243,9 @@ p { font-weight: 400; }
 /* Legal links start at 494px and the copyright line at 620px, ending 5px below the social icons */
 .footer-right { display: flex; flex-direction: column; align-items: flex-end; gap: 35px; text-align: right; font-size: 16px; margin-bottom: -6px; }
 .footer-legal { display: flex; flex-direction: column; align-items: flex-end; gap: 15px; }
-.footer-legal a { opacity: 0.7; transition: opacity 150ms ease-out; }
-.footer-legal a:hover { opacity: 1; }
+.footer-legal a, .footer-legal button { opacity: 0.7; transition: opacity 150ms ease-out; }
+.footer-legal a:hover, .footer-legal button:hover, .footer-legal button:focus-visible { opacity: 1; }
+.footer-legal button { background: none; border: 0; padding: 0; font: inherit; color: inherit; cursor: pointer; }
 .footer-right small { font-size: 16px; }
 
 /* ---------- Shared layout ---------- */

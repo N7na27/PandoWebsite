@@ -65,7 +65,6 @@ def nav(page):
     </nav>
     <div class="mobile-extra">
       <div class="row">
-        <button class="nav-link" data-modal="login">Log in</button>
         <button class="theme-toggle" data-theme-toggle><span class="swatch"></span><span class="theme-label">Cold</span></button>
       </div>
       <a class="btn btn-primary" href="contact.html">Get in touch</a>
@@ -75,7 +74,6 @@ def nav(page):
   <div class="nav-right">
     <div class="nav-util glass">
       <span class="nav-link" title="Language">EN</span>
-      <button class="nav-link" data-modal="login">Log in</button>
       <button class="theme-toggle" data-theme-toggle><span class="swatch"></span><span class="theme-label">Cold</span></button>
     </div>
     <a class="btn btn-primary" href="contact.html">Get in touch</a>
@@ -117,6 +115,7 @@ FOOTER = f"""<footer class="footer">
         <a href="privacy.html">Privacy Notice</a>
         <a href="terms.html">Terms of Use</a>
         <a href="accessibility.html">Accessibility Statement</a>
+        <button type="button" data-modal="login">Team log in</button>
       </nav>
       <small>© 2026 Pando Surgical, Inc. All rights reserved.</small>
     </div>
@@ -157,6 +156,7 @@ FOOTER_SIMPLE = f"""<footer class="footer-simple">
       <a href="privacy.html">Privacy Notice</a>
       <a href="terms.html">Terms of Use</a>
       <a href="accessibility.html">Accessibility Statement</a>
+      <button type="button" data-modal="login">Team log in</button>
     </nav>
   </div>
 </footer>"""
