@@ -6,6 +6,7 @@ once. Edit this file, then run:  python3 tools/build.py
 """
 from pathlib import Path
 import html
+import re
 
 ROOT = Path(__file__).resolve().parent.parent
 ICONS = ROOT / "assets" / "icons"
@@ -307,6 +308,26 @@ page("index.html", "Home", "Pando Surgical makes ergonomic surgical tools that a
 """, extra=MODEL_SCRIPTS)
 
 # ---------------------------------------------------------------- LapRotator
+# Tab content from the Figma "LapRotator Tabs" component (Wireframe Components)
+FEATURES = [
+    "Compatible with existing laparoscopic systems",
+    "One-handed rotation for enhanced control",
+    "Compact and lightweight frame",
+    "Simple user interface",
+    "Designed to help reduce surgeon fatigue during procedures",
+]
+SPECS = [
+    ("Laparoscopes (Standard Autoclavable, 30 cm)", "502-555-010/030/045 (5.0 mm); 502-457-010/030/045 (10.0 mm)"),
+    ("IDEAL EYES™ HD (30 cm)", "502-539-010/030/045 (5.0 mm); 502-859-010/030/045 (10.0 mm)"),
+    ("Bariatric (45 cm)", "502-205-010/030/045 (5.0 mm)"),
+    ("Pediatric", "502-543-010/030 (2.7 mm); 502-290-010/030 (2.9 mm, IDEAL EYES™)"),
+    ("Camera coupler", "Stryker 1488 HD Camera Head Coupler, 18 mm (P/N 1488-020-122)"),
+]
+FEATURE_ITEMS = "\n".join(f'      <li><span class="check"><img src="assets/icons/icon-check.svg" alt="" width="16" height="16"></span>{f}</li>' for f in FEATURES)
+# Keep each part number on one line, so phones never break it at a hyphen
+def _pn(text):
+    return re.sub(r"\d+(?:-\d+)+(?:/\d+)*", lambda m: f'<span class="pn">{m.group(0)}</span>', text)
+SPEC_ROWS = "\n".join(f'      <div class="spec-row"><dt>{k}</dt><dd>{_pn(v)}</dd></div>' for k, v in SPECS)
 page("laprotator.html", "LapRotator", "LapRotator: an attachment for laparoscopes that gives surgeons intuitive, single-handed scope rotation.", "laprotator", f"""
 <section class="lr-hero">
   <div class="lr-art"><div class="lr-float"><img src="assets/img/laprotator-device.webp" alt="LapRotator attached to a laparoscope" width="1889" height="832"></div></div>
@@ -341,12 +362,18 @@ page("laprotator.html", "LapRotator", "LapRotator: an attachment for laparoscope
     </div>
   </div>
   <div class="tab-panel" role="tabpanel" id="panel-feat" aria-labelledby="tab-feat" hidden>
-    <h3>LapRotator – Features and Advantages</h3>
-    <div class="placeholder">Features and advantages content coming soon.</div>
+    <h3>Features and Advantages</h3>
+    <ul class="features">
+{FEATURE_ITEMS}
+    </ul>
   </div>
   <div class="tab-panel" role="tabpanel" id="panel-spec" aria-labelledby="tab-spec" hidden>
-    <h3>LapRotator – Specifications</h3>
-    <div class="placeholder">Specifications coming soon.</div>
+    <h3>Specifications</h3>
+    <h4 class="spec-head">Compatibility</h4>
+    <p class="spec-intro">The LapRotator is compatible with the following Stryker rigid laparoscopes and camera coupler:</p>
+    <dl class="spec-table">
+{SPEC_ROWS}
+    </dl>
   </div>
 </section>
 """)
