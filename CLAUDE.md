@@ -58,4 +58,5 @@ Live at https://n7na27.github.io/PandoWebsite/ (GitHub Pages, deploys from `main
   - Commit messages: a short summary line, then a few lines on what changed and why.
 - **Not connected yet:**
   - The contact, careers and log in forms are front end only.
-  - Placeholders (3D LapRotator model, stat source, some news dates) stay as they are until real content arrives.
+  - Placeholders (stat source, some news dates) stay as they are until real content arrives.
+- **3D model:** `assets/model/laprotator.glb` comes from "LapRotator render (revB).blend" via `tools/model.py` (run it with Blender 5.2, see the script). The poster image is a capture of the first frame at 1512px.

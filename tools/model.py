@@ -1,20 +1,22 @@
 """Export the LapRotator Blender model as one small GLB for the landing page.
 
-Run it with Blender (it uses Blender's own Python):
-  /Applications/Blender.app/Contents/MacOS/Blender -b "<path>/LapRotator.blend" --python tools/model.py
+Run it with Blender 5.2 or newer (it uses Blender's own Python):
+  /Applications/Blender.app/Contents/MacOS/Blender -b "<path>/LapRotator render (revB).blend" --python tools/model.py
 Writes assets/model/laprotator.glb.
 
-The .blend holds the Onshape parts, one object per CAD face. Every face keeps its Blender
-material as it is: today those are the Onshape MTL colors (flat greys, no gloss). Change a
-material in Blender and the website follows (Principled base color, metallic, roughness, coat).
-Parts moved in Blender stay moved. Positions are stored as 16-bit and normals as 8-bit
-(glTF KHR_mesh_quantization), which keeps the file near 1.5 MB with no visible loss.
-The GLB uses the Onshape frame in meters, where the scope runs along +Z through x = 0, y = 0.
+The .blend (revB) holds one object per part (Drum_Body, Handle, Shaft_Luer, the membrane keys...),
+each with its own render material. Every material goes to the website as it is in Blender
+(Principled base color, metallic, roughness, coat), so change a material there and the site follows.
+Modifiers (Smooth by Angle, bevels) are applied. Lights, cameras and hidden objects are left out.
+Positions are stored as 16-bit and normals as 8-bit (glTF KHR_mesh_quantization), which keeps the
+file small with no visible loss.
+
+The GLB is in meters, in the frame js/model.js expects: the scope runs along +Z (toward the tip)
+through x = 0, y = 0, and the camera's three buttons face -Y.
 """
 import json
 import struct
 import sys
-from collections import Counter
 from pathlib import Path
 
 import bpy
@@ -23,38 +25,18 @@ import numpy as np
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "assets/model/laprotator.glb"
 
-# Onshape gives every part its own MTL material, so the material tells which part a face belongs to
-PART_BY_MATERIAL = {
-    "0.647059_0.647059_0.647059_0.000000_0.000000": "Camera",
-    "0.901961_0.901961_0.901961_0.000000_0.000000": "Battery Housing",
-    "0.901961_0.901961_0.901961_0.000000_0.001": "Main Housing",
-    "0.901961_0.901961_0.901961_0.000000_0.002": "Main Housing Cap",
-    "0.917647_0.917647_0.917647_0.000000_0.000000": "Coupler",
-    "0.917647_0.917647_0.917647_0.000000_0.001": "Scope",
-    "0.917647_0.917647_0.917647_0.000000_0.002": "Scope Gear L",
-    "0.917647_0.917647_0.917647_0.000000_0.003": "Scope Gear R",
-}
-
-# The scope turns inside the housing (that's what the device does). Turn it and its gears so the
-# light post points the same way as in the product render (up, on the button side).
-# The turn finds the scope by its Onshape material. If you give the scope your own material in
-# Blender, turn it there instead and set this to 0.
-SCOPE_TURN_DEG = 180
-SCOPE_PARTS = ("Scope", "Scope Gear L", "Scope Gear R")
-
-
-def turn_about_scope(v, deg):
-    """Rotate points or normals (N x 3) about the scope axis (z, through x = 0, y = 0)."""
-    a = np.radians(deg)
-    c, s = np.cos(a), np.sin(a)
-    return np.stack([c * v[:, 0] - s * v[:, 1], s * v[:, 0] + c * v[:, 1], v[:, 2]], axis=1)
+# The revB parts are scaled up 33.0646x from meters
+METERS_PER_UNIT = 1 / 33.0646
+# In the .blend the scope runs along -Y (toward the tip). These parts find the frame:
+SCOPE = "Shaft_Luer"      # its thin tube gives the spin axis
+BUTTONS = "LR_ButtonMetal"  # the camera's three buttons, which should face -Y in the GLB
 
 
 def gltf_material(mat):
     """glTF material from a Blender material (Principled BSDF values)."""
     name = mat.name if mat else "default"
     out = {"name": name, "pbrMetallicRoughness": {"baseColorFactor": [0.8, 0.8, 0.8, 1], "metallicFactor": 0, "roughnessFactor": 1}}
-    node = next((n for n in mat.node_tree.nodes if n.type == "BSDF_PRINCIPLED"), None) if mat and mat.use_nodes else None
+    node = next((n for n in mat.node_tree.nodes if n.type == "BSDF_PRINCIPLED"), None) if mat and mat.node_tree else None
     pbr = out["pbrMetallicRoughness"]
     if node is None:
         if mat:
@@ -70,51 +52,69 @@ def gltf_material(mat):
     return out
 
 
+def evaluated(o, depsgraph):
+    """World-space vertices, corner data and materials of a mesh object, with modifiers applied."""
+    ev = o.evaluated_get(depsgraph)
+    mesh = ev.to_mesh()
+    mesh.calc_loop_triangles()
+    nv, nl, nt = len(mesh.vertices), len(mesh.loops), len(mesh.loop_triangles)
+    co = np.empty(nv * 3); mesh.vertices.foreach_get("co", co)
+    lv = np.empty(nl, np.int64); mesh.loops.foreach_get("vertex_index", lv)
+    ln = np.empty(nl * 3); mesh.corner_normals.foreach_get("vector", ln)
+    tl = np.empty(nt * 3, np.int64); mesh.loop_triangles.foreach_get("loops", tl)
+    tm = np.empty(nt, np.int64); mesh.loop_triangles.foreach_get("material_index", tm)
+    mats = [s.material for s in o.material_slots]
+    ev.to_mesh_clear()
+    m = np.array(o.matrix_world)
+    pos = co.reshape(-1, 3) @ m[:3, :3].T + m[:3, 3]
+    corner_n = ln.reshape(-1, 3) @ np.linalg.inv(m[:3, :3])
+    corner_n /= np.maximum(np.linalg.norm(corner_n, axis=1, keepdims=True), 1e-12)
+    return pos, lv, corner_n, tl.reshape(-1, 3), tm, mats
+
+
+def frame(depsgraph):
+    """(origin, rotation rows) that take Blender world space to the GLB frame described above."""
+    pos, lv, _, tl, tm, mats = evaluated(bpy.data.objects[SCOPE], depsgraph)
+    tip = pos[:, 1].min()
+    tube = pos[pos[:, 1] < tip + (pos[:, 1].max() - tip) * 0.5]  # the far half is only the bare tube
+    origin = np.array([(tube[:, 0].min() + tube[:, 0].max()) / 2, 0, (tube[:, 2].min() + tube[:, 2].max()) / 2])
+    z = np.array([0.0, -1, 0])
+    for o in bpy.context.scene.objects:
+        if o.type != "MESH":
+            continue
+        pos, lv, _, tl, tm, mats = evaluated(o, depsgraph)
+        hit = [i for i, m in enumerate(mats) if m and m.name == BUTTONS]
+        if hit:
+            c = pos[lv[tl[np.isin(tm, hit)]].reshape(-1)].mean(0) - origin
+            y = -(c - z * c.dot(z)); y /= np.linalg.norm(y)
+            return origin, np.stack([np.cross(y, z), y, z])
+    sys.exit(f"No faces with the material {BUTTONS}")
+
+
 def collect():
     """Return ({(part, material name): [(positions, normals, indices), ...]}, {material name: glTF material})."""
-    objs = [o for o in bpy.context.scene.objects if o.type == "MESH" and not o.hide_render]
-    # The Onshape import put every face object under one shared transform; undo it
-    common = Counter(tuple(round(v, 6) for row in o.matrix_world for v in row) for o in objs).most_common(1)[0][0]
-    to_onshape = np.linalg.inv(np.array(common).reshape(4, 4))
     depsgraph = bpy.context.evaluated_depsgraph_get()
+    origin, rot = frame(depsgraph)
     materials, groups = {}, {}
-    for o in objs:
-        ev = o.evaluated_get(depsgraph)
-        mesh = ev.to_mesh()
-        mesh.calc_loop_triangles()
-        nv, nl, nt = len(mesh.vertices), len(mesh.loops), len(mesh.loop_triangles)
-        if not nt:
-            ev.to_mesh_clear()
+    for o in sorted(bpy.context.scene.objects, key=lambda o: o.name):
+        if o.type != "MESH" or o.hide_render or not o.visible_get():
             continue
-        co = np.empty(nv * 3); mesh.vertices.foreach_get("co", co)
-        lv = np.empty(nl, np.int64); mesh.loops.foreach_get("vertex_index", lv)
-        ln = np.empty(nl * 3); mesh.corner_normals.foreach_get("vector", ln)
-        tl = np.empty(nt * 3, np.int64); mesh.loop_triangles.foreach_get("loops", tl)
-        tm = np.empty(nt, np.int64); mesh.loop_triangles.foreach_get("material_index", tm)
-        mats = [s.material for s in o.material_slots]
-        ev.to_mesh_clear()
-
-        m = to_onshape @ np.array(o.matrix_world)
-        pos = co.reshape(-1, 3) @ m[:3, :3].T + m[:3, 3]
-        corner_n = ln.reshape(-1, 3) @ np.linalg.inv(m[:3, :3])
-        corner_n /= np.maximum(np.linalg.norm(corner_n, axis=1, keepdims=True), 1e-12)
-
+        pos, lv, corner_n, tris, tm, mats = evaluated(o, depsgraph)
+        if not len(tris):
+            continue
+        pos = (pos - origin) @ rot.T * METERS_PER_UNIT
+        corner_n = corner_n @ rot.T
         for mi in np.unique(tm):
             mat = mats[mi] if mi < len(mats) else None
             name = mat.name if mat else "default"
             materials.setdefault(name, gltf_material(mat))
-            part = PART_BY_MATERIAL.get(name, "Other")
-            loops = tl.reshape(-1, 3)[tm == mi].reshape(-1)
+            loops = tris[tm == mi].reshape(-1)
             # One vertex per unique (position, corner normal)
             pairs = np.concatenate([lv[loops][:, None].astype(np.float64), np.round(corner_n[loops], 4)], axis=1)
             uniq, inv = np.unique(pairs, axis=0, return_inverse=True)
             first = np.zeros(len(uniq), np.int64)
             first[inv.reshape(-1)] = np.arange(len(loops))
-            vp = pos[lv[loops][first]]
-            vn = corner_n[loops][first]
-            if part in SCOPE_PARTS and SCOPE_TURN_DEG:
-                vp, vn = turn_about_scope(vp, SCOPE_TURN_DEG), turn_about_scope(vn, SCOPE_TURN_DEG)
-            groups.setdefault((part, name), []).append((vp, vn, inv.reshape(-1)))
+            groups.setdefault((o.name, name), []).append((pos[lv[loops][first]], corner_n[loops][first], inv.reshape(-1)))
     return groups, materials
 
 
@@ -195,7 +195,7 @@ def main():
     mats = [materials[m] for m in mat_names]
     used = ["KHR_mesh_quantization"] + (["KHR_materials_clearcoat"] if any("extensions" in m for m in mats) else [])
     gltf = {
-        "asset": {"version": "2.0", "generator": "Pando tools/model.py (Blender)"},
+        "asset": {"version": "2.0", "generator": "Pando tools/model.py (Blender, LapRotator revB)"},
         "extensionsUsed": used, "extensionsRequired": ["KHR_mesh_quantization"],
         "scene": 0, "scenes": [{"nodes": [len(nodes) - 1]}],
         "nodes": nodes, "meshes": meshes, "materials": mats,

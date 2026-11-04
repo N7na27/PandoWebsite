@@ -2,11 +2,13 @@
    Default: turns around the scope's axis. Hover (or keyboard focus, or a tap on touch screens): eases to a stop at that angle.
    Drag (or the arrow keys when focused) turns it around the scope by hand; it glides on after a flick.
    Posed like the product render: scope running off to the lower left, camera body up front on the right.
-   Shown with its own materials from the model file (today the Onshape MTL colors) under plain, even light:
-   no reflections, gloss or effects. The model (assets/model/laprotator.glb) is exported from
-   LapRotator.blend by tools/model.py. Until it loads, or if WebGL is missing, the poster image shows. */
+   Shown with its own materials from the model file (white plastic with a light coat, colored keys,
+   stainless scope, metal buttons), lit by a soft studio room so the gloss and metal read like the renders.
+   The model (assets/model/laprotator.glb) is exported from "LapRotator render (revB).blend" by tools/model.py.
+   Until it loads, or if WebGL is missing, the poster image shows. */
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
 
 const box = document.querySelector(".lr-model");
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -34,27 +36,24 @@ if (box) {
 async function start() {
   const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 0.9;
 
-  // Plain, even light: soft fill everywhere plus one light from the upper left so the shape reads
+  // Studio light: a soft room for reflections (the metal needs something to mirror),
+  // plus one key light from the upper left so the shape reads
   const scene = new THREE.Scene();
-  scene.add(new THREE.AmbientLight(0xffffff, 1.3));
-  const key = new THREE.DirectionalLight(0xffffff, 1.6);
+  const pmrem = new THREE.PMREMGenerator(renderer);
+  scene.environment = pmrem.fromScene(new RoomEnvironment(renderer), 0.04).texture;
+  pmrem.dispose();
+  const key = new THREE.DirectionalLight(0xffffff, 1.0);
   key.position.set(-1, 2, 3);
   scene.add(key);
 
-  const camera = new THREE.PerspectiveCamera(24, 1, 0.01, 50);
+  const camera = new THREE.PerspectiveCamera(24, 1, 0.1, 50);
 
   const gltf = await new GLTFLoader().loadAsync("assets/model/laprotator.glb");
   const model = gltf.scene;
-  // The MTL colors are flat, with no shine, so show them as plain matte color.
-  // A material made in Blender with metal, gloss or coat keeps its own settings.
-  const matte = {};
-  model.traverse((o) => {
-    if (!o.isMesh) return;
-    const m = o.material;
-    if (m.metalness > 0 || m.roughness < 1 || m.clearcoat > 0) return;
-    o.material = matte[m.name] ||= new THREE.MeshLambertMaterial({ name: m.name, color: m.color });
-  });
+  model.traverse((o) => { if (o.isMesh) o.material.envMapIntensity = 0.7; }); // softer reflections than the full room
 
   // Center along the scope, keep the scope's axis (x = 0, y = 0) as the spin axis
   const bounds = new THREE.Box3().setFromObject(model);
